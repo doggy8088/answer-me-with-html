@@ -2,10 +2,10 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, zh-tw]
   pull_request:
   schedule:
-    - cron: '17 3 * * 1'   # 每周一跑一次：上游 skills CLI / Claude Code 变化导致安装失败时尽早发现
+    - cron: '17 3 * * 1'   # 每週一跑一次：上游 skills CLI / Claude Code 變化導致安裝失敗時儘早發現
   workflow_dispatch:
 
 permissions:
@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   test:
-    # 单元测试 + 健壮性测试：Linux 跑三个 Node 版本，macOS / Windows 各跑一个（用户主要在 macOS 上用）。
+    # 單元測試 + 健壯性測試：Linux 跑三個 Node 版本，macOS / Windows 各跑一個（使用者主要在 macOS 上用）。
     # The full entry (ubuntu / Node 22) also runs the checks needed only once: bundle, coverage, examples, website,
     # HTML snapshot and the real install.
     name: test (${{ matrix.os }}, ${{ matrix.node }})
@@ -85,7 +85,7 @@ jobs:
         if: ${{ matrix.full }}
         run: npm run smoke:install
 
-  # 视频端到端：espeak-ng 配音 + 无头 Chrome 逐帧 + ffmpeg 编码，确认播放页脚本在真实浏览器里能跑完。
+  # 影片端到端：espeak-ng 配音 + 無頭 Chrome 逐幀 + ffmpeg 編碼，確認播放頁指令碼在真實瀏覽器裡能跑完。
   # The three slow end-to-end parts run as separate jobs at the same time; one after another they took about four minutes.
   video-e2e:
     runs-on: ubuntu-latest

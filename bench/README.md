@@ -6,7 +6,7 @@ Numbers come straight from `claude -p --output-format json`: `modelUsage.outputT
 
 ## What the model writes (fixed)
 
-The corpus is the 9 hand-written HTML pages and the 9 Markdown drafts from the plain-setup run below. It is a [release download](https://github.com/QingYunA/answer-me-with-html/releases/download/v0.4.14/bench-corpus-2026-10-07.zip), kept out of git because plugin installs copy the whole repository. [count-tokens.mjs](count-tokens.mjs) counted their tokens with the model's own tokenizer (Claude Sonnet 5.5, no API key needed) and saved them in [corpus/tokens.json](corpus/tokens.json). To count again, unzip the download into `bench/corpus/` and run `node bench/count-tokens.mjs`. `node bench/corpus.mjs` reports them:
+The corpus is the 9 hand-written HTML pages and the 9 Markdown drafts from the plain-setup run below. It is a [release download](https://github.com/doggy8088/answer-me-with-html/releases/download/v0.4.14/bench-corpus-2026-10-07.zip), kept out of git because plugin installs copy the whole repository. [count-tokens.mjs](count-tokens.mjs) counted their tokens with the model's own tokenizer (Claude Sonnet 5.5, no API key needed) and saved them in [corpus/tokens.json](corpus/tokens.json). To count again, unzip the download into `bench/corpus/` and run `node bench/count-tokens.mjs`. `node bench/corpus.mjs` reports them:
 
 | | Hand-written HTML | Markdown draft |
 | :--- | ---: | ---: |
@@ -108,25 +108,25 @@ Each run happens in a fresh temp folder. The "direct" runs may only use the Writ
 
 ---
 
-# 基准测试：直接要 HTML vs Answer me with HTML
+# 基準測試：直接要 HTML vs Answer me with HTML
 
-同一个问题、同一个模型，各出一页。每格是 3 次运行的中位数（Claude Sonnet 5.5，2026-10-07）。上表即结果。
+同一個問題、同一個模型，各出一頁。每格是 3 次執行的中位數（Claude Sonnet 5.5，2026-10-07）。上表即結果。
 
-- **模型要写的 token（固定）：** 语料是下面普通环境那次运行的 9 页手写 HTML 和 9 份 Markdown 稿件，可以[下载](https://github.com/QingYunA/answer-me-with-html/releases/download/v0.4.14/bench-corpus-2026-10-07.zip)，不入库。用模型自己的分词器数过 token，结果存在 [corpus/tokens.json](corpus/tokens.json)。`node bench/corpus.mjs` 输出：手写 HTML 平均 4,893 个 token，其中 SVG 占 47%、CSS 15%、标签 17%、正文 21%；稿件平均 612 个 token，少 8.0 倍。语料和计数都不变，这些数字就不变。
-- **输出 token 和耗时大幅下降：** 模型只写简短的 Markdown 稿件，CSS、版面和所有 SVG 坐标都由 CLI 生成。
-- **普通环境**（`BENCH_LEAN=1`，每轮读约 2.5 万个 token 的上下文）：输出 token 4,932 → 1,007（少 4.9 倍），耗时 31 秒 → 12 秒（快 2.6 倍），花费 $0.091 → $0.077（便宜 15%），9 次配对里 skill 每次都更便宜。
-- **加载很重的环境**（我们自己的 Claude Code 配置，每轮读约 8.6 万个 token）：输出 token 7,656 → 1,070（少 7.2 倍），耗时 50 秒 → 14 秒（快 3.5 倍），花费 $0.220 → $0.138（便宜 37%），9 次里 8 次更便宜。这里花费主要看缓存：18 次里有 7 次缓存没命中，整段上下文被重新写入，单次花费 $0.28–0.54。2026-10-02 那次测到 skill 贵约 20%，但那次没有记录缓存数据，无法判断有几次没命中。
-- **花费降得比 token 少：** 按 $10/百万（输出）、$4 或 $2.5/百万（缓存写）、$0.2/百万（缓存读）拆开，直接写 HTML 时输出只占花费的 55%，所以即使 skill 一个输出 token 都不写，最多也只能省 55%。skill 多出的花费主要是缓存写：它要载入约 4,000 token 的 `SKILL.md`。把设置和视频的说明拆到按需读取的文件后，普通环境下 skill 的花费从 $0.083 降到 $0.077，页面质量不变。
-- **页面风格不同：** 直接要 HTML 得到的是更长、文字更多的长文；用 skill 得到的是一到两屏的紧凑页面。
+- **模型要寫的 token（固定）：** 語料是下面普通環境那次執行的 9 頁手寫 HTML 和 9 份 Markdown 稿件，可以[下載](https://github.com/doggy8088/answer-me-with-html/releases/download/v0.4.14/bench-corpus-2026-10-07.zip)，不入庫。用模型自己的分詞器數過 token，結果存在 [corpus/tokens.json](corpus/tokens.json)。`node bench/corpus.mjs` 輸出：手寫 HTML 平均 4,893 個 token，其中 SVG 佔 47%、CSS 15%、標記 17%、正文 21%；稿件平均 612 個 token，少 8.0 倍。語料和計數都不變，這些數位就不變。
+- **輸出 token 和耗時大幅下降：** 模型只寫簡短的 Markdown 稿件，CSS、版面和所有 SVG 座標都由 CLI 生成。
+- **普通環境**（`BENCH_LEAN=1`，每輪讀約 2.5 萬個 token 的上下文）：輸出 token 4,932 → 1,007（少 4.9 倍），耗時 31 秒 → 12 秒（快 2.6 倍），花費 $0.091 → $0.077（便宜 15%），9 次配對裡 skill 每次都更便宜。
+- **載入很重的環境**（我們自己的 Claude Code 組態，每輪讀約 8.6 萬個 token）：輸出 token 7,656 → 1,070（少 7.2 倍），耗時 50 秒 → 14 秒（快 3.5 倍），花費 $0.220 → $0.138（便宜 37%），9 次裡 8 次更便宜。這裡花費主要看快取：18 次裡有 7 次快取沒命中，整段上下文被重新寫入，單次花費 $0.28–0.54。2026-10-02 那次測到 skill 貴約 20%，但那次沒有記錄快取資料，無法判斷有幾次沒命中。
+- **花費降得比 token 少：** 按 $10/百萬（輸出）、$4 或 $2.5/百萬（快取寫）、$0.2/百萬（快取讀）拆開，直接寫 HTML 時輸出只佔花費的 55%，所以即使 skill 一個輸出 token 都不寫，最多也只能省 55%。skill 多出的花費主要是快取寫：它要載入約 4,000 token 的 `SKILL.md`。把設定和影片的說明拆到按需讀取的檔案後，普通環境下 skill 的花費從 $0.083 降到 $0.077，頁面品質不變。
+- **頁面風格不同：** 直接要 HTML 得到的是更長、文字更多的長文；用 skill 得到的是一到兩屏的緊湊頁面。
 
-**解释视频：** 同样的方法，一个题目（TCP 握手），不配音。手写要求是一个自包含、自动播放的 3Blue1Brown 风格页面，含标题与图表场景、逐步字幕、播放/暂停和进度条；skill 一侧用 `am video`，3b1b 主题，`--voice off`。Claude Sonnet 5.5，2026-10-05。
+**解釋影片：** 同樣的方法，一個題目（TCP 握手），不配音。手寫要求是一個自包含、自動播放的 3Blue1Brown 風格頁面，含標題與圖表場景、逐步字幕、播放/暫停和進度條；skill 一側用 `am video`，3b1b 主題，`--voice off`。Claude Sonnet 5.5，2026-10-05。
 
-- 输出 token 中位数 27,839 → 1,566（少 17.8 倍），耗时 202 秒 → 17 秒（快 11.8 倍）。
-- 手写 3 次、`am video` 2 次。第 3 次手写来自同一脚本的更早一次运行，那次其余的运行遇到限流，只保留了这一行。
-- 视频不报花费：同一种方式在不同次之间波动太大。
-- 所有页面都在 Chrome 里打开检查过：3 个手写页面会自动播放，有分场景、字幕和进度条。`am video` 的页面还有镜头聚焦和场景间的变形，这是手写提示里没要求的。
-- 一个题目、5 次运行，只能看大概量级，不是精确倍数。
+- 輸出 token 中位數 27,839 → 1,566（少 17.8 倍），耗時 202 秒 → 17 秒（快 11.8 倍）。
+- 手寫 3 次、`am video` 2 次。第 3 次手寫來自同一指令碼的更早一次執行，那次其餘的執行遇到限流，只保留了這一行。
+- 影片不報花費：同一種方式在不同次之間波動太大。
+- 所有頁面都在 Chrome 裡打開檢查過：3 個手寫頁面會自動播放，有分場景、字幕和進度條。`am video` 的頁面還有鏡頭聚焦和場景間的變形，這是手寫提示裡沒要求的。
+- 一個題目、5 次執行，只能看大概量級，不是精確倍數。
 
-复现：普通环境用 `BENCH_LEAN=1 node bench/run.mjs sonnet bench/results/lean 3`（原始数据在 [results/lean/results.json](results/lean/results.json)）；视频用 `BENCH_KIND=video BENCH_TOPICS=tcp node bench/run.mjs sonnet bench/results/video 2`。原始数据在 [results/video/results.json](results/video/results.json)，生成的页面不入库。
+復現：普通環境用 `BENCH_LEAN=1 node bench/run.mjs sonnet bench/results/lean 3`（原始資料在 [results/lean/results.json](results/lean/results.json)）；影片用 `BENCH_KIND=video BENCH_TOPICS=tcp node bench/run.mjs sonnet bench/results/video 2`。原始資料在 [results/video/results.json](results/video/results.json)，生成的頁面不入庫。
 
-复现方法见上方 "Run it yourself"。
+復現方法見上方 "Run it yourself"。

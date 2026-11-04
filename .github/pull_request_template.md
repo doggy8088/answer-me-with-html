@@ -21,5 +21,5 @@ Don't delete this section. Show what you saw, not only what you ran:
 ## Docs
 
 <!--
-Don't delete this section. A change to the draft syntax or the CLI usually needs `am help`, docs/reference.md, docs/reference.zh-CN.md or SKILL.md updated. If no docs changed, say why.
+Don't delete this section. A change to the draft syntax or the CLI usually needs `am help`, docs/reference.md, docs/reference.zh-TW.md or SKILL.md updated. If no docs changed, say why.
 -->

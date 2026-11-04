@@ -1,6 +1,6 @@
 # Explainer video details
 
-[简体中文](video.zh-CN.md)
+[繁體中文](video.zh-TW.md)
 
 Everything `am video` does. The README lists only the most common points.
 
