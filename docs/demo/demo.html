@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <title>Answer me with HTML — demo</title>
 <!--
-  演示视频的逐帧动画页，1920×1080。window.render(t) 按时间 t（秒）确定性地摆放所有元素，
-  make-demo.mjs 的截图脚本以 30 fps 调用它并截图。需要与渲染好的 tcp.html（examples/tcp.en.md）
-  以及 ../images/plain-vs-skill.png 一起通过 HTTP 提供。数字来自 bench/results/results.json。
+  示範影片的逐幀動畫頁，1920×1080。window.render(t) 按時間 t（秒）確定性地擺放所有元素，
+  make-demo.mjs 的截圖指令碼以 30 fps 呼叫它並截圖。需要與渲染好的 tcp.html（examples/tcp.en.md）
+  以及 ../images/plain-vs-skill.png 一起透過 HTTP 提供。數位來自 bench/results/results.json。
 -->
 <style>
   html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0b0d12; }
@@ -272,7 +272,7 @@
     <svg class="logo a" id="e-logo"><use href="#logo"/></svg>
     <h1 class="a" id="e-h">Answer me with <span class="accent">HTML</span></h1>
     <div class="cmd a" id="e-cmd"><span>$</span> <span id="e-typed" style="color:#e8ebf0"></span><span class="cursor" id="e-cursor" style="height:42px"></span></div>
-    <div class="url a" id="e-url">github.com/QingYunA/answer-me-with-html</div>
+    <div class="url a" id="e-url">github.com/doggy8088/answer-me-with-html</div>
     <div class="langs a" id="e-langs"><span>中文</span><span>English</span><span>日本語</span></div>
   </div>
 </section>
@@ -284,7 +284,7 @@
     n: q.get('n') || 3, r: q.get('r') || 3, model: q.get('model') || 'Claude Sonnet 5.5' };
   const $ = (id) => document.getElementById(id);
 
-  // ── 缓动与时间工具 ──
+  // ── 緩動與時間工具 ──
   const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
   const prog = (t, a, b) => clamp((t - a) / (b - a));
   const eo = (x) => 1 - (1 - x) ** 3;
@@ -293,13 +293,13 @@
   const lerp = (a, b, x) => a + (b - a) * x;
   const fmt = (v) => Math.round(v).toLocaleString('en-US');
 
-  // 元素上浮出现
+  // 元素上浮出現
   const rise = (el, t, start, dur = 0.55, dy = 36) => {
     const x = eo(prog(t, start, start + dur));
     el.style.opacity = x;
     el.style.transform = `translateY(${(1 - x) * dy}px)`;
   };
-  // 场景在 [a, b) 内可见，进出各 0.25 s 淡入淡出
+  // 場景在 [a, b) 內可見，進出各 0.25 s 淡入淡出
   const scene = (el, t, a, b, fade = 0.25) => {
     const v = t < a || t >= b ? 0 : Math.min(prog(t, a, a + fade), 1 - prog(t, b - fade, b));
     el.style.opacity = v;
@@ -311,7 +311,7 @@
   document.querySelectorAll('[data-r="tok"]').forEach((el) => { el.textContent = `${(D.pt / D.st).toFixed(1)}×`; });
   document.querySelectorAll('[data-r="time"]').forEach((el) => { el.textContent = `${(D.ps / D.ss).toFixed(1)}×`; });
 
-  // ── 页面镜头：等 iframe 加载后量出各面板的位置 ──
+  // ── 頁面鏡頭：等 iframe 載入後量出各面板的位置 ──
   let rects = {};
   let pageH = 1600;
   let titleH = 1600;
@@ -326,7 +326,7 @@
       iframe.style.height = `${h}px`;
       if (iframe.id === 'f-title') titleH = h;
       if (iframe.id === 'f-blue') pageH = h;
-      // 镜头推拉以 blueprint 版面为准（两套主题的边距不同）
+      // 鏡頭推拉以 blueprint 版面為準（兩套主題的邊距不同）
       if (iframe.id === 'f-blue') {
         for (const id of ['panel-A', 'panel-B', 'panel-C', 'panel-D']) {
           const r = doc.getElementById(id)?.getBoundingClientRect();
@@ -344,7 +344,7 @@
     prep($('f-patch'), 'blueprint', 'light'),
   ]).then(() => document.fonts.ready);
 
-  // 镜头：让矩形 r（页面坐标）居中并占满视口的 fill 比例
+  // 鏡頭：讓矩形 r（頁面座標）居中並佔滿畫面的 fill 比例
   const VW = 1760, VH = 934;
   const shot = (r, fill = 0.88) => {
     const s = Math.min((VW * fill) / r.w, (VH * fill) / r.h);
@@ -352,9 +352,9 @@
   };
   const mix = (a, b, x) => ({ s: lerp(a.s, b.s, x), x: lerp(a.x, b.x, x), y: lerp(a.y, b.y, x) });
 
-  // ── 主渲染：t 秒时刻的完整画面 ──
+  // ── 主渲染：t 秒時刻的完整畫面 ──
   window.render = (t) => {
-    // 1. 标题 0–4
+    // 1. 標題 0–4
     if (scene($('s-title'), t, 0, 4) > 0) {
       rise($('t-logo'), t, 0.05);
       rise($('t-h1'), t, 0.2, 0.6, 50);
@@ -371,12 +371,12 @@
       const w = eo(prog(t, 1.0, 1.8));
       $('t-win').style.opacity = w;
       $('t-win').style.transform = `translateX(${(1 - w) * 160}px) rotateY(${lerp(-22, -9, w) + prog(t, 1.8, 4) * 3}deg) rotateX(${lerp(6, 3, w)}deg)`;
-      // 窗口视口高 654px，页面缩放 0.7；最多滚到可滚动距离的 80%，避免露出页面底部的空白
+      // 窗口畫面高 654px，頁面縮放 0.7；最多滾到可滾動距離的 80%，避免露出頁面底部的空白
       const maxScroll = Math.max(0, titleH - 654 / 0.7) * 0.8;
       $('t-cam').style.transform = `scale(0.7) translateY(${-eio(prog(t, 1.9, 4)) * maxScroll}px)`;
     }
 
-    // 2. 实测对比 4–8
+    // 2. 實測對比 4–8
     if (scene($('s-compare'), t, 4, 8) > 0) {
       $('c-wrap').style.transform = `scale(${lerp(1, 1.035, prog(t, 4, 8))})`;
       rise($('c-h'), t, 4.05);
@@ -398,7 +398,7 @@
       }
     }
 
-    // 3. 终端 8–13
+    // 3. 終端 8–13
     if (scene($('s-term'), t, 8, 13) > 0) {
       const enter = eo(prog(t, 8, 8.4));
       const push = eio(prog(t, 12.45, 13));
@@ -419,7 +419,7 @@
       $('m-path').style.backgroundSize = `${eo(prog(t, 12.15, 12.5)) * 100}% 100%`;
     }
 
-    // 4. 页面 13–19：推近时序图 → 平移到流程图 → 拉远；主题淡入淡出
+    // 4. 頁面 13–19：推近時序圖 → 平移到流程圖 → 拉遠；主題淡入淡出
     if (scene($('s-page'), t, 13, 19) > 0 && rects['panel-A']) {
       const enter = eo(prog(t, 13, 13.45));
       $('p-win').style.transform = `scale(${lerp(0.97, 1, enter)})`;
@@ -443,7 +443,7 @@
       $('f-dark').style.opacity = dark;
     }
 
-    // 5. 并排 19–22
+    // 5. 並排 19–22
     if (scene($('s-sbs'), t, 19, 22) > 0) {
       rise($('s-h'), t, 19.05);
       for (const [id, s, dx] of [['s-l', 19.2, -90], ['s-r', 19.35, 90]]) {
@@ -461,14 +461,14 @@
       $('s-ten').style.transform = `scale(${lerp(1, 1.25, Math.sin(pop * Math.PI))})`;
     }
 
-    // 6. 解释视频 22–28：手绘播放器，逐步画出时序图，镜头推近 Server，字幕逐句出现
+    // 6. 解釋影片 22–28：手繪播放器，逐步畫出時序圖，鏡頭推近 Server，字幕逐句出現
     if (scene($('s-video'), t, 22, 28) > 0) {
       rise($('v-h'), t, 22.05);
       rise($('v-sub'), t, 22.25);
       const w = eo(prog(t, 22.2, 22.8));
       $('v-win').style.opacity = w;
       $('v-win').style.transform = `translateY(${(1 - w) * 60}px) scale(${lerp(0.96, 1, w) * lerp(1, 1.02, prog(t, 22.8, 28))})`;
-      // 参与者先出现，三条消息依次一笔画出（每条 0.6 s）
+      // 參與者先出現，三條訊息依次一筆畫出（每條 0.6 s）
       $('v-actors').style.opacity = eo(prog(t, 22.7, 23.1));
       const steps = [[1, 23.2], [2, 24.3], [3, 25.4]];
       for (const [i, s0] of steps) {
@@ -480,10 +480,10 @@
         path.setAttribute('marker-end', p > 0.97 ? 'url(#v-arr)' : '');
         $(`v-m${i}`).style.opacity = clamp((t - s0) / 0.2);
       }
-      // 第二句时镜头推近 Server 并高亮，第三句拉回
+      // 第二句時鏡頭推近 Server 並高亮，第三句拉回
       const push = eio(prog(t, 24.2, 24.8)) * (1 - eio(prog(t, 25.3, 25.9)));
       const s1 = lerp(1, 1.18, push);
-      const fx = 844, fy = 236; // Server 附近在舞台上的坐标（viewBox 裁切放大后）
+      const fx = 844, fy = 236; // Server 附近在舞台上的座標（viewBox 裁切放大後）
       $('v-cam').style.transform = `translate(${(690 - fx * s1) * push}px, ${(290 - fy * s1) * push}px) scale(${s1})`;
       const hl = push > 0.05;
       $('v-server').setAttribute('stroke', hl ? '#f7d96f' : '#58c4dd');
@@ -495,14 +495,14 @@
       $('v-cap').innerHTML = cur ? cur[1] : '';
       $('v-cap').style.opacity = cur ? clamp((t - cur[0]) / 0.2) : 0;
       $('v-cap').style.display = cur ? 'inline-block' : 'none';
-      // 进度条、时间与声波
+      // 進度條、時間與聲波
       const vt = lerp(5.2, 16.8, prog(t, 22.8, 28));
       $('v-fill').style.width = `${(vt / 42) * 100}%`;
       $('v-time').textContent = `0:${String(Math.floor(vt)).padStart(2, '0')} / 0:42`;
       [...$('v-wave').children].forEach((bar, k) => { bar.style.height = `${8 + 16 * Math.abs(Math.sin(t * 9 + k * 1.3))}px`; });
     }
 
-    // 7. 只改一个面板 28–32
+    // 7. 只改一個面板 28–32
     if (scene($('s-patch'), t, 28, 32) > 0 && rects['panel-C']) {
       rise($('q-h'), t, 28.05);
       rise($('q-sub'), t, 28.25);
@@ -515,10 +515,10 @@
       $('q-cursor').style.opacity = t < 29.4 ? (Math.floor(t * 2.5) % 2 ? 0.15 : 1) : 0;
       rise($('q-l1'), t, 29.45, 0.3, 16);
       rise($('q-l2'), t, 29.95, 0.3, 14);
-      // 页面缩放到窗口宽度，镜头略微推向 C
+      // 頁面縮放到窗口寬度，鏡頭略微推向 C
       const VWp = 926, s0 = VWp / 1280;
       const C = rects['panel-C'];
-      // 不缩放，只把页面滚到 C 附近；滚动不超过页底，避免露出空白
+      // 不縮放，只把頁面滾到 C 附近；滾動不超過頁底，避免露出空白
       const z = s0;
       const cy = C.y + C.h / 2;
       const ox = 0;
@@ -539,7 +539,7 @@
       rise($('e-logo'), t, 32.05);
       rise($('e-h'), t, 32.2);
       rise($('e-cmd'), t, 32.4);
-      const cmd = 'npx skills add QingYunA/answer-me-with-html';
+      const cmd = 'npx skills add doggy8088/answer-me-with-html';
       $('e-typed').textContent = cmd.slice(0, Math.round(cmd.length * prog(t, 32.55, 33.2)));
       $('e-cursor').style.opacity = Math.floor(t * 2.5) % 2 ? 0.15 : 1;
       rise($('e-url'), t, 33.25);

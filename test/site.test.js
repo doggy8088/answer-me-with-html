@@ -141,7 +141,7 @@ test('site build: sitemap.xml lists every page with the head alternates and robo
       assert.ok(url, page);
       assert.deepEqual(url.match(/<xhtml:link [^>]*\/>/g), [
         `<xhtml:link rel="alternate" hreflang="en" href="${SITE_URL}${en}"/>`,
-        `<xhtml:link rel="alternate" hreflang="zh-CN" href="${SITE_URL}${zh}"/>`,
+        `<xhtml:link rel="alternate" hreflang="zh-TW" href="${SITE_URL}${zh}"/>`,
         `<xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${en}"/>`,
       ]);
     }
@@ -195,7 +195,7 @@ test('site build: the wall has one link card per catalog theme, with a pre-rende
     assert.ok(!html.includes('engine.js'), `${page}: the wall does not mention the renderer`);
     // The one <pre> is the prompt that hands making a theme to an agent; installing happens on each theme's page.
     assert.ok(!/role="tab(list|panel)?"|tcopy-btn|<pre(?! id="c-make")/.test(html), `${page}: no install UI on the wall`);
-    assert.match(html, /Font: Bangers|字体: Bangers/);
+    assert.match(html, /Font: Bangers|字體: Bangers/);
     assert.match(html, /data-page="catalog"/);
   }
   assert.match(read(join(ROOT, 'site/dist/index.html')), /href="\.\/?themes\/"|href="themes\/"/, 'the home page links the wall');
@@ -210,26 +210,26 @@ test('site build: every theme has a page in both languages with its install acti
       const html = read(join(ROOT, 'site/dist', page));
       assert.ok(html.includes(`<link rel="canonical" href="${SITE_URL}${canonical}">`), `${page}: canonical`);
       assert.ok(html.includes(`<link rel="alternate" hreflang="en" href="${SITE_URL}themes/${name}/">`), `${page}: hreflang en`);
-      assert.ok(html.includes(`<link rel="alternate" hreflang="zh-CN" href="${SITE_URL}zh/themes/${name}/">`), `${page}: hreflang zh-CN`);
+      assert.ok(html.includes(`<link rel="alternate" hreflang="zh-TW" href="${SITE_URL}zh/themes/${name}/">`), `${page}: hreflang zh-TW`);
       assert.ok(html.includes(`<link rel="alternate" hreflang="x-default" href="${SITE_URL}themes/${name}/">`), `${page}: hreflang x-default`);
       assert.ok(html.includes(`<meta property="og:url" content="${SITE_URL}${canonical}">`), `${page}: og:url`);
-      assert.match(html, new RegExp(`<title>[^<]*${lang === 'en' ? 'theme' : '主题'} — Answer me with HTML</title>`), `${page}: title`);
+      assert.match(html, new RegExp(`<title>[^<]*${lang === 'en' ? 'theme' : '主題'} — Answer me with HTML</title>`), `${page}: title`);
       assert.match(html, /<a class="tback mono" href="\.\.\/">/, `${page}: back link`);
       assert.match(html, /data-page="theme"/);
       assert.ok(html.includes('<iframe src="preview.html"'), `${page}: the pre-rendered preview is in the page`);
       assert.ok(!html.includes('engine.js'), `${page}: the engine loads only on request`);
       assert.equal(html.match(/class="btn btn-primary tinstall-agent"/g)?.length, 1, `${page}: one primary button`);
-      assert.match(html, /data-method="agent"[^>]*>(Copy for your agent|复制给你的 agent)</);
+      assert.match(html, /data-method="agent"[^>]*>(Copy for your agent|複製給你的 agent)</);
       assert.ok(html.includes(`<pre id="t-cmd">am theme add ${name} --use</pre>`), `${page}: command`);
       assert.match(html, /Command \(0\.5\.3\+\)|命令（0\.5\.3\+）/);
       assert.ok(html.includes(`run am theme add ${name} --use. On a version before 0.5.3, save ${url} as ~/.answer-me-with-html/themes/${name}.json instead.`)
-        || html.includes(`运行 am theme add ${name} --use。如果版本低于 0.5.3，改为把 ${url} 保存为 ~/.answer-me-with-html/themes/${name}.json。`), `${page}: agent text`);
+        || html.includes(`執行 am theme add ${name} --use。如果版本低於 0.5.3，改為把 ${url} 儲存為 ~/.answer-me-with-html/themes/${name}.json。`), `${page}: agent text`);
       const details = html.match(/<details\b[^>]*>[\s\S]*?<\/details>/g) ?? [];
       assert.equal(details.length, 1, `${page}: one <details>`);
       assert.ok(!/<details\b[^>]*\bopen\b/.test(details[0]), `${page}: closed by default`);
       assert.ok(details[0].includes(`curl -fsSL ${url} -o ~/.answer-me-with-html/themes/${name}.json --create-dirs`), `${page}: curl inside`);
       assert.ok(details[0].includes(`Invoke-WebRequest ${url} -OutFile`), `${page}: PowerShell inside`);
-      assert.match(details[0], /Older versions \(manual install\)|旧版本（手动安装）/);
+      assert.match(details[0], /Older versions \(manual install\)|舊版本（手動安裝）/);
       assert.ok(!html.slice(0, html.indexOf('<details')).includes('curl -fsSL'), `${page}: curl only in the details`);
       assert.doesNotMatch(html, /role="tab(list|panel)?"/, `${page}: no install tabs`);
       assert.match(html, /0\.4\.10/);
@@ -304,12 +304,12 @@ test('site build: the editor page is built in both languages, loads its script a
     const html = read(join(ROOT, 'site/dist', page));
     assert.match(html, /data-page="editor"/, page);
     assert.ok(html.includes(`<link rel="canonical" href="${SITE_URL}${canonical}">`), `${page}: canonical`);
-    assert.ok(html.includes(`<link rel="alternate" hreflang="en" href="${SITE_URL}themes/new/">`) && html.includes(`<link rel="alternate" hreflang="zh-CN" href="${SITE_URL}zh/themes/new/">`), `${page}: hreflang`);
+    assert.ok(html.includes(`<link rel="alternate" hreflang="en" href="${SITE_URL}themes/new/">`) && html.includes(`<link rel="alternate" hreflang="zh-TW" href="${SITE_URL}zh/themes/new/">`), `${page}: hreflang`);
     for (const id of ['ed-from', 'ed-file', 'ed-form', 'ed-view', 'ed-problems', 'ed-submit', 'ed-download']) assert.ok(html.includes(`id="${id}"`), `${page}: #${id}`);
     assert.match(html, /<select id="ed-from"/);
     assert.match(html, /<div id="ed-problems"[^>]*aria-live="polite"|<div id="ed-problems" class="ed-problems" aria-live="polite"/, `${page}: problems are announced`);
     assert.doesNotMatch(html.replace(/<script type="application\/json"[\s\S]*?<\/script>/, ''), /\{\{\s*[\w.-]+\s*\}\}/, `${page}: no unfilled placeholder`);
-    assert.match(html, lang === 'en' ? /<h1 id="e-title">Make a theme<\/h1>/ : /<h1 id="e-title">制作主题<\/h1>/, page);
+    assert.match(html, lang === 'en' ? /<h1 id="e-title">Make a theme<\/h1>/ : /<h1 id="e-title">製作主題<\/h1>/, page);
     assert.match(html, /class="tool lang-switch" href="\.\.\/\.\.\/(?:zh\/)?themes\/new\/"|class="tool lang-switch" href="\.\.\/\.\.\/\.\.\/themes\/new\/"/, `${page}: language switch`);
     assert.ok(html.includes('<script type="application/json" id="site-ui">'), page);
   }
@@ -347,7 +347,7 @@ test('site build: the changelog pages have a section for every changelog file, n
     const html = read(join(ROOT, 'site/dist', page));
     assert.deepEqual([...html.matchAll(/<section class="cl-version" id="v([\d-]+)"/g)].map((m) => m[1].replaceAll('-', '.')), versions, page);
     assert.ok(html.includes(`<link rel="canonical" href="${SITE_URL}${canonical}">`), `${page}: canonical`);
-    assert.ok(html.includes(`hreflang="zh-CN" href="${SITE_URL}zh/changelog/"`), `${page}: hreflang`);
+    assert.ok(html.includes(`hreflang="zh-TW" href="${SITE_URL}zh/changelog/"`), `${page}: hreflang`);
     assert.ok(!/\{\{/.test(html), `${page}: unfilled placeholder`);
   }
 });

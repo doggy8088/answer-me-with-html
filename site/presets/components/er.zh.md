@@ -1,7 +1,7 @@
 ---
 title: er
 ---
-## A 一个商店的数据模型
+## A 一個商店的資料模型
 ```er LR
 *User
   id PK
