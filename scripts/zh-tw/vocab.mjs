@@ -45,6 +45,7 @@ export const PHRASES = [
   ['打印和 PDF/PNG 匯出時隱藏', '列印和 PDF/PNG 匯出時隱藏'],
   ['其他 WAV 寫程式和其他格式', '其他 WAV 編碼和其他格式'],
   // OpenCC second-pass artifacts and first-pass mis-segmentations.
+  ['隻影響', '只影響'],   // OpenCC 把副詞「只」（僅）誤轉為量詞「隻」
   ['選一個類別型', '選一個類型'],
   ['型別別', '型別'],
   ['字面量（Literal）（Literal）', '字面量（Literal）'],
