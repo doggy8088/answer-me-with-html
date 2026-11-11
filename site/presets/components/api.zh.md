@@ -1,7 +1,7 @@
 ---
 title: api
 ---
-## A HTTP 接口
+## A HTTP 介面
 ```api
 GET /users/{id}
 path

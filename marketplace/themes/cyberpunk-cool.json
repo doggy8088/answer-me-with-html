@@ -8,7 +8,7 @@
   "license": "MIT",
   "description": {
     "en": "Cool city haze with subdued amber card edges, layered depth and six-color headings.",
-    "zh": "冷蓝城市雾感，搭配低亮度琥珀面板边缘、立体层次和六级标题。"
+    "zh": "冷藍城市霧感，搭配低亮度琥珀面板邊緣、立體層次和六級標題。"
   },
   "source": "Adapted from the user-provided cyberpunk3.css; palette, typography and decoration revised to the user brief.",
   "tokens": {

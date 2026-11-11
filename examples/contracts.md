@@ -1,10 +1,10 @@
 ---
-title: 用户服务接口与模型
+title: 使用者服務介面與模型
 cols: 2
 lang: zh
 ---
 
-## A 类模型
+## A 類模型
 ```class LR
 abstract Entity
   +id: string
@@ -17,10 +17,10 @@ class SqlUserRepository
   +find(id: string): User
 User --|> Entity
 SqlUserRepository ..|> UserRepository
-SqlUserRepository ..> User: 读取
+SqlUserRepository ..> User: 讀取
 ```
 
-## B 数据模型
+## B 資料模型
 ```er LR
 User
   id uuid PK
@@ -28,16 +28,16 @@ User
 Session
   id uuid PK
   user_id uuid FK -> User
-User 1--* Session: 拥有
+User 1--* Session: 擁有
 ```
 
-## C HTTP 接口
+## C HTTP 介面
 ```api
 GET /users/{id}
 path
-  id uuid required | 用户标识
+  id uuid required | 使用者標識
 query
-  include string optional | 关联资源
+  include string optional | 關聯資源
 response 200 User
   id uuid required
   email string required
@@ -45,7 +45,7 @@ response 404 Error
   message string required
 ```
 
-## D RPC 接口
+## D RPC 介面
 ```api
 RPC users.UserService/GetUser
 request GetUserRequest

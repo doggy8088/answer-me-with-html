@@ -28,9 +28,9 @@ import { catalogIndex, detailValues, readCatalog, wallHtml } from './catalog.mjs
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const SITE = join(ROOT, 'site');
 const SRC = join(SITE, 'src');
-const REPO = 'QingYunA/answer-me-with-html';
+const REPO = 'doggy8088/answer-me-with-html';
 // Where the site is published (GitHub Pages with a custom domain). Absolute URLs in the pages (canonical, hreflang, share images) start here.
-const SITE_URL = 'https://answer-me-with-html.com/';
+const SITE_URL = 'https://answer-me-with-html.gh.miniasp.com/';
 // The visit counter is served from a subdomain of the site, so the analytics server behind it stays private.
 // Cloudflare proxies the subdomain and only lets the tracker and its event endpoint through.
 // data-domains in the tag (see site/template.html) keeps local previews from counting.
@@ -39,7 +39,7 @@ export const STATS_WEBSITE_ID = '6cfdb29e-3e32-432f-8371-a2aee22393ad';
 
 // The page's own browser files, copied to assets/ without changes.
 const FRONT_FILES = ['main.js', 'live.js', 'chrome.js', 'playground.js', 'catalog.js', 'theme.js', 'editor.js', 'style.css'];
-const IMAGES = ['text-vs-page.png', 'text-vs-page-zh.png', 'tcp-en.png', 'tcp.png', 'tcp-en-dark.png', 'ste100.png', 'video-en.png', 'video-zh.png', 'plain-vs-skill.png'];
+const IMAGES = ['text-vs-page.png', 'text-vs-page-zh.png', 'tcp-en.png', 'tcp.png', 'tcp-en-dark.png', 'ste100.png', 'video-en.png', 'video-zh.png', 'plain-vs-skill.png', 'og-en.jpg', 'og-zh.jpg'];
 const PRERENDER = [
   ['video', 'examples/video-tcp.en.md', 'video-en.html'],
   ['video', 'examples/video-tcp.md', 'video-zh.html'],
@@ -49,26 +49,26 @@ const PRERENDER = [
 // The pages of the site, in groups: a group is one page in each language, from one template. alt is the other language's page, relative to this one.
 const PAGES = [
   { lang: 'en', htmlLang: 'en', out: 'index.html', alt: 'zh/', path: '' },
-  { lang: 'zh', htmlLang: 'zh-CN', out: 'zh/index.html', alt: '../', path: 'zh/' },
+  { lang: 'zh', htmlLang: 'zh-TW', out: 'zh/index.html', alt: '../', path: 'zh/' },
 ];
 // The changelog (site/template-changelog.html): changelog/*.md at the repository root, drawn by site/changelog.mjs.
 const CHANGELOG_PAGES = [
   { lang: 'en', htmlLang: 'en', out: 'changelog/index.html', alt: '../zh/changelog/', path: 'changelog/' },
-  { lang: 'zh', htmlLang: 'zh-CN', out: 'zh/changelog/index.html', alt: '../../changelog/', path: 'zh/changelog/' },
+  { lang: 'zh', htmlLang: 'zh-TW', out: 'zh/changelog/index.html', alt: '../../changelog/', path: 'zh/changelog/' },
 ];
 const THEME_PAGES = [
   { lang: 'en', htmlLang: 'en', out: 'themes/index.html', alt: '../zh/themes/', path: 'themes/' },
-  { lang: 'zh', htmlLang: 'zh-CN', out: 'zh/themes/index.html', alt: '../../themes/', path: 'zh/themes/' },
+  { lang: 'zh', htmlLang: 'zh-TW', out: 'zh/themes/index.html', alt: '../../themes/', path: 'zh/themes/' },
 ];
 // The theme editor (site/template-editor.html). A catalog theme cannot be named "new" (src/themes/catalog-rules.js), so the folder is free.
 const EDITOR_PAGES = [
   { lang: 'en', htmlLang: 'en', out: 'themes/new/index.html', alt: '../../zh/themes/new/', path: 'themes/new/' },
-  { lang: 'zh', htmlLang: 'zh-CN', out: 'zh/themes/new/index.html', alt: '../../../themes/new/', path: 'zh/themes/new/' },
+  { lang: 'zh', htmlLang: 'zh-TW', out: 'zh/themes/new/index.html', alt: '../../../themes/new/', path: 'zh/themes/new/' },
 ];
 // The pages of one catalog theme: its own folder in each language.
 const themePages = (name) => [
   { lang: 'en', htmlLang: 'en', out: `themes/${name}/index.html`, alt: `../../zh/themes/${name}/`, path: `themes/${name}/` },
-  { lang: 'zh', htmlLang: 'zh-CN', out: `zh/themes/${name}/index.html`, alt: `../../../themes/${name}/`, path: `zh/themes/${name}/` },
+  { lang: 'zh', htmlLang: 'zh-TW', out: `zh/themes/${name}/index.html`, alt: `../../../themes/${name}/`, path: `zh/themes/${name}/` },
 ];
 export const pageGroups = (catalog) => [PAGES, THEME_PAGES, EDITOR_PAGES, CHANGELOG_PAGES, ...catalog.map((e) => themePages(e.name))];
 // The sample page of the theme previews: the playground's TCP draft in each language, drawn light (the page flips to dark by data-mode).

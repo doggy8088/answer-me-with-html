@@ -1,0 +1,470 @@
+# 參考
+
+[English](reference.md)
+
+## 稿件格式
+
+````markdown
+---
+template: sheet        # sheet 是多面板網格（預設），doc 是單欄長文加大綱條
+theme: auto            # auto（預設）：長文用 paper，有圖表用 blueprint；也可寫 blueprint、shadcn、paper 或你自己的主題
+title: 頁面標題
+subtitle: 一句話說明
+file: tcp-handshake    # 檔名；標題裡沒有或只有很少 ASCII 字母時使用（見輸出）
+cols: 3                # sheet 的列數（整數）
+outline: right         # doc 且有 3 個及以上章節時，大綱條在正文的哪一側：left 或 right（預設 right）
+source: RFC 9293       # 其他任意欄位會顯示在標題下方
+---
+導語，寫一兩句核心結論。
+
+## A 面板標題 {span=2 meta="右上角的小字"}
+這裡寫普通 Markdown，段落、列表、表格都行。
+
+```flow LR
+A -> B: 標記
+```
+````
+
+- 每個 `## ` 開頭的標題是一個面板。面板編號可以不寫，會自動補上：前 26 個是 A 到 Z，再往後是 `P27`、`P28` 這樣。自己寫的編號必須唯一，而且和自動序列給的是同一套編號：`## P27 標題` 宣告的就是 `P27`，後面的面板不會再自動拿到 `P27`。
+- `span=2` 讓面板佔兩列，`rows=2` 讓面板佔兩行，`bare` 會去掉面板的標題欄。`span` 和 `rows` 必須是整數，寫成 `span=2.5` 這樣的小數會報錯。`span` 只是提示：頁面會按內容調整每個面板的大小，寬表格和寬圖不需要寫 `span`。只有想讓某個面板更突出時才寫 `span`。`rows` 只對普通網格生效（關閉 JavaScript、列印和窄屏時）；瀏覽器裡的對齊排版會忽略它。
+- 元件也可以寫成 VitePress、Docusaurus 那樣的 `:::名稱 參數` … `:::` 塊，效果和圍欄程式碼塊完全一樣，只認元件名稱；`:::note` 和單獨的 `:::` 仍按普通文字處理，塊在冒號數不少於開頭的那一行結束。
+- 在 Markdown 表格後緊接著寫 `{table sort}`，讀者就能點選表頭排序，再點一次反向排序。右對齊的列，以及每個單元格都是數位或有效 ISO 日期的列，按值排序；其他列按文字排序。數位可以用逗號作千位分隔符，也可以帶 `$` 前綴或 `%` 後綴，例如 `1,200`、`$900` 和 `12%`。按值排序的列裡，可解析的值排在其他文字之前，數位按數值排序（包括大於 2^53 的整數），相同值保持原有行順序；`2024-02-31` 這樣不存在的日期按文字處理。`{table filter}` 增加一個不區分大小寫的全文篩選框，`{table sort filter}` 同時開啟兩項。控制項支援鍵盤操作，在列印和 PNG/PDF 匯出時隱藏；沒有 JavaScript 時不顯示控制項，但完整表格仍會渲染。不寫屬性的表格保持靜態。
+- 元件覆蓋不到的情況，可以用 ```` ```html ```` 或 ```` ```svg ```` 直接嵌入原始程式碼。頁面帶有內容安全策略（Content-Security-Policy），程式碼塊裡的指令碼和內聯事件處理器不會執行，也不會從網路載入任何內容。`html` 或 `svg` 塊裡有 `<script>` 時，`am render` 還會給出帶稿件行號的警告。
+- `flow` 圖裡的某條邊會穿過別的節點，或穿過另一條邊的標記時，`am render` 也會給出帶稿件行號的警告和改法（通常是換個方向，如 ```` ```flow TB ````，或把圖拆開）；頁面仍會寫出。
+- `<host>` 這樣的佔位符會按文字顯示。句子裡只保留行內標記（`b`、`kbd`、`sup`、`a`、`span`、`br`、`img` 等），會破壞頁面的標記（`script`、`style`、`iframe` 等）也按文字顯示。原始標記請放進 `html` 或 `svg` 程式碼塊，程式碼請放進反引號。渲染時會列出被改動的每個標記。
+- 有 3 個及以上面板的 `doc` 頁面帶一條大綱條：每個章節一小段刻度，在正文一側，側邊由 `outline:` 指定（`left` 或 `right`，預設 `right`；從右到左的頁面裡左右鏡像）。懸停或聚焦刻度顯示該章節標題；在大綱條上停留片刻，或點選、輕點它，展開完整列表；滾動時標出當前章節。方向鍵在列表中行動，Esc 關閉。沒有 JavaScript 時列表仍能展開、連結仍能跳轉。列印時隱藏大綱條。
+
+每個元件的完整寫法：`am help <元件名>`。
+
+## 類圖與介面定義
+
+程式碼結構使用 `class`，資料庫實體使用 `er`，HTTP / RPC 介面使用 `api`。完整範例見 [contracts.md](../examples/contracts.md)。
+
+````markdown
+```class LR
+abstract Entity
+  +id: string
+class User
+  -email: string
+  +save(): void
+interface Store
+  +find(id: string): User
+User --|> Entity
+User ..> Store: uses
+```
+````
+
+- 在行首宣告 `class`、`interface`、`abstract` 或 `enum`。只寫名稱時表示普通類；名稱前的 `*` 表示高亮。
+- 縮進屬性和方法。可見性、型別和簽名按原文顯示。去掉可見性標記後，以 `名稱(` 開頭的成員放在方法分區；屬性型別中的括號不表示方法。
+- 關係支援 `--|>` 繼承、`..|>` 實作、`*--` 組合、`o--` 聚合、`-->` 關聯、`..>` 依賴和 `--` 普通關聯。箭頭在右端，菱形在左端；可用 `: 標記` 標註連線。
+- 關係兩端都必須宣告。支援自關聯和平行連線。方向為 `TB`（預設）、`LR`、`BT` 或 `RL`。
+
+````markdown
+```api
+GET /users/{id}
+path
+  id string required | 使用者 ID
+query
+  include string optional
+response 200 User
+  email string required
+response 404 Error
+  message string required
+```
+
+```api
+RPC users.UserService/GetUser
+request GetUserRequest
+  id string required
+response OK User
+  email string \| null optional
+response NOT_FOUND
+```
+````
+
+- 每個 `api` 塊定義一個介面。HTTP 使用大寫方法和 `/路徑`；RPC 使用 `RPC` 和服務方法名。
+- 分區支援 `path`、`query`、`headers`、`request [型別]` 和 `response 狀態 [型別]`。RPC 使用 `request` 和 `response`。HTTP 回應狀態碼為 100 至 599；RPC 支援狀態名。回應可以省略欄位，表示空回應內文。
+- 縮進欄位，格式為 `名稱 型別 [required|optional] | 說明`。型別、巢狀 (Nesting)欄位路徑和說明按純文字顯示。必填性列直接顯示“必填”或“可選”。未宣告的欄位顯示短橫線；整張表均未宣告時省略此列。
+- 型別中的豎線寫成 `\|`。例如 `email string \| null optional | 聯繫方式` 表示聯合型別 `string | null`；第一個未轉義的 `|` 開始說明。
+- 標記跟隨頁面語言。類圖複用現有主題、縮放和圖示查看器；介面欄位使用語義表格。兩種元件都支援離線頁面。
+- 元件只展示定義，不發送請求，也不匯入 OpenAPI 或 protobuf 檔案。類圖中的 `+` / `-` 表示可見性，不表示變更標記。
+
+完整語法：`am help class`、`am help er`、`am help api`。
+
+## 在頁面上回復
+
+每個頁面都有**回覆**按鈕。讀者可以在任意麵板上寫評論（面板標題欄裡的氣泡按鈕），然後把一段 Markdown 回覆複製給 Agent。重新整理頁面後，選擇和評論都還在。讀者作答、評論或標註後，頁面底部會出現一條欄，顯示各項數量，一鍵複製回覆；回覆面板預設顯示渲染後的回覆，將被複制的 Markdown 折疊在下方。
+
+**標註**按鈕打開後，讀者可以點選段落、列表項、引用、程式碼塊、表格或 $$ 公式塊，選一個類型（建議、保留、疑問、關注），也可以寫一句批註。標註顯示在該塊上，重新整理後仍在，並在回覆的“標註”一節裡帶上該塊開頭的引文返回。頁面標題和麵板標題不能標註，請用面板評論。
+
+標註模式打開時，`Tab` 也能逐個選中每個塊，按 `Enter` 或空格打開它的彈窗。彈窗可以只用鍵盤操作。型別按鈕帶編號：按 `1`–`4` 選一個類型，焦點隨後移到批註框（在批註框裡，數位就是普通文字）。選好型別前，儲存按鈕不可用，彈窗會提示。`Ctrl` / `⌘` + `Enter` 儲存。不儲存就關閉彈窗（`Esc` 或點選彈窗外）時，型別和批註會作為該塊的草稿保留，直到重新整理頁面；**清除全部標註**也會清掉草稿。
+
+需要讀者做決定時，在受影響的面板裡寫一個 `ask` 塊：
+
+````markdown
+```ask
+用哪個快取？
+* Redis | 重啟後資料還在
+- Memcached | 更簡單，不落盤
+```
+````
+
+- 第一行是問題。每個選項以 `*`（建議項，帶標記；所有選項開始時都不選中）或 `-` 開頭，寫 2 到 6 個選項。
+- 單選必須有且只有一個 `*`。`ask multi` 允許多選，`*` 標出建議的選項，它們開始時也不勾選。
+- 回覆會寫明每個決定是讀者改過的、確認了建議，還是沒有作答。評論和標註的批註原文以 `>` 引用的形式返回。
+
+完整寫法：`am help ask`。
+
+## 程式碼塊
+
+項目裡已有的程式碼，直接引用檔案，不用手抄：
+
+````markdown
+```ts src=server/routes.ts lines=18-30 hl=22
+```
+````
+
+- 語言名不是元件名的 fence 都是程式碼塊，帶標題欄和複製按鈕。
+- `src=` 讀取檔案，`lines=18-30` 選出要顯示的行，行號與檔案一致。程式碼塊裡不寫內容。路徑從當前目錄讀取，只引用當前目錄裡的檔案。
+- `hl=22` 或 `hl=20-22,25` 高亮指定行。手寫的程式碼用 `title="limits.ts · sketch"` 命名，用 `start=38` 讓行號從 38 開始。
+- 程式碼塊超過 40 行會收到提醒，超過 200 行會報錯。按慣例存放密鑰的檔案（`.env`、`*.pem`、`id_rsa`、`.ssh/`、`.git/` 等），以及任何位置含有疑似密鑰或 token 的檔案，都會被拒絕。規則與 html-plan 一致。
+- 渲染結果會列出嵌入了哪些檔案。頁面會記住路徑；`am patch` 會重新讀取檔案，檔案已經行動時，就用頁面裡已有的那份。
+
+要展示一處改動，在 `diff` fence 裡貼上 unified diff，CLI 負責繪製：
+
+````markdown
+```diff file=src/code.js
+@@ -60,3 +60,3 @@
+ export function parseCodeArgs(args) {
+-  const attrs = parseAttrs(args);
++  const attrs = parseAttrs(args, { diff: true });
+   const opts = {};
+```
+````
+
+- 以 `+` 開頭的行是新增（綠色），`-` 是刪除（紅色），空格開頭是上下文。`@@ -60,3 +60,3 @@` 開始一個 hunk：顯示為一條細分隔行，並決定行號，舊行號和新行號各佔一列。沒有 `@@` 時，`start=N` 從 N 開始編號；兩者都沒有，就不顯示行號。
+- `file=` 寫在標題欄裡，語言標記取自它的擴充名；沒有 `file=` 時，用 `+++ b/path` 那一行的路徑。標題欄還會顯示統計，例如 `+1 −1`。複製按鈕按原樣複製 diff。
+- `hl=` 用新檔案一側的行號。`diff --git`、`---`、`+++` 和 `\ No newline at end of file` 行可以保留，但不會顯示。
+- 不以 `+`、`-`、空格或 `@@` 開頭的行會報錯，`...` 這樣的省略行也會報錯：請拆成兩個 hunk。hunk 的行數與 `@@` 頭不符會收到提醒。`diff` 暫不支援 `src=`：請直接貼 diff。限制與其他程式碼塊相同。
+
+完整寫法：`am help code`。
+
+## 圖片
+
+圖表表達不了的內容，比如真實的介面，可以用已經存在的圖片檔案：
+
+```markdown
+![遊戲的三種觀戰視角](/絕對路徑/screenshot.png)
+```
+
+- 圖片單獨寫一行。alt 文字會成為圖注，所以要寫這張圖顯示了什麼。寫作檢查也會讀它。
+- 請用絕對路徑。相對路徑從稿件檔案所在的目錄讀取；稿件來自 stdin 時，從當前目錄讀取。路徑裡有空格也可以。
+- 支援 PNG、JPG、GIF、WebP、AVIF 和 SVG，單個檔案不超過 5 MB。圖片會嵌入頁面，頁面仍是一個能離線打開的檔案。寬圖會縮小到面板的寬度。
+- 遠端圖片不會載入：頁面會攔截所有遠端請求，`http(s)` 或 `//` 連結只會顯示空白，渲染時也會給出警告。請先把圖片存成檔案，再寫它的本地路徑。`data:` URI 可以用。
+- 頁面會記住每張圖片的路徑。`am patch` 會重新從檔案嵌入圖片；檔案已經行動時，就用頁面裡已有的那份。
+- 本工具不生成圖片。
+
+完整寫法：`am help image`。
+
+## 公式
+
+正文裡的公式，把 LaTeX 寫在美元符號之間：
+
+```markdown
+頂點權重：$w(v)=\prod_{u\prec v}N_u^{-1}$。
+
+$$
+\widehat g=\sum_{i=1}^{n} w_i\widehat A_i\nabla_\theta\log\pi_\theta(a_i\mid s_i)
+$$
+```
+
+- `$…$` 是行內公式。獨立公式是：單獨一行 `$$`，後面幾行寫 TeX，再單獨一行 `$$`；也可以寫成一行 `$$ E = mc^2 $$`。獨立公式裡不能有空行。
+- 生成頁面時由 [Temml](https://temml.org) 排版，輸出 MathML，所以頁面不需要指令碼，也不需要聯網。有公式的頁面會帶上一個小的數學字體（約 9 KB）和相應樣式；沒有公式的頁面不變。公式沿用正文的顏色，所以每個主題和模式都能用。
+- 在從右到左的頁面上，公式仍然從左到右排。
+- 比面板寬的獨立公式會在面板內橫向滾動。行內公式在 Chrome 和 Firefox 裡會在關係符或運算符（`=`、`+`）之後換行；Safari 不會換行。長公式請寫成 `$$` 塊。
+- 不是公式的美元符號保持原樣。開頭的 `$` 後面是非空格；結尾的 `$` 前面是非空格、後面不是數位，所以 `$5 and $10` 和 `$5-$10` 保持原樣。結尾的 `$` 後面是字母（A-Z、a-z）或 `_` 時也不算結尾，所以 `$PATH:$HOME` 保持原樣；請寫 `$n$-th`，不要寫 `$n$th`。要寫美元符號，用 `\$`。行內公式必須在一行內。
+- 公式可用於段落、列表、表格、引用、標題、`callout`、`kv`、`ask`、`timeline` 和 `tree` 的文字。行內程式碼、程式碼塊、圖示（`flow`、`er`、`sequence` 等）和 `am video` 不支援公式。表格單元格里請寫 `\vert x \vert`，不要寫 `|x|`。
+- Temml 讀不懂的 TeX 不會讓渲染失敗：頁面照常寫出，公式以紅色等寬的原始 TeX 顯示（提示文字裡有錯誤資訊），渲染時會輸出帶稿件行號的警告，例如 `L12 [math] $\foo$ is shown as raw TeX: ...`。有公式警告的頁面不會自動打開；改好 TeX 後用 `--replace` 重新渲染。
+- `\ref`、`\eqref` 和 `\label` 需要頁面裡沒有的指令碼，會給出警告，且不顯示內容。`\tag{1}` 可以在 `$$` 塊裡使用。
+- 標註和回覆引用公式時，寫的是你稿件裡的 TeX，連同 `$` 或 `$$`，例如 `Energy $E = mc^2$ holds`。
+- 寫作檢查會跳過 TeX。
+
+命令列裡的寫法：`am help format`。
+
+## 圖表
+
+要比較的數位，寫一個 `chart` 塊。它按表格畫出柱狀圖、折線圖或餅圖，不用手寫 `svg` 塊：
+
+````markdown
+```chart bar unit=ms
+       | p50 | p95
+* Redis     | 12  | 40
+Memcached   | 9   | 31
+Postgres    | 28  | 95
+```
+````
+
+- 圖表型別跟在 `chart` 後面：`bar` 畫豎直柱狀圖，`bar horizontal` 畫水平柱狀圖，`line` 每個系列畫一條折線，`pie` 畫環形圖。每一行是一個標記，加上每個系列各一個數位，單元格之間用 `|` 隔開。
+- 第一行如果各個值都不是數位，它就是系列名，標記單元格可以留空。一行裡有多個數位時必須寫這一行，讀者才知道每種顏色是什麼。不寫這一行時，每行只有一個數位：一個系列，沒有圖例。`bar` 和 `line` 系列寫 1 到 6 個。`bar` 最多 24 行，`line` 最多 60 個點。
+- 數位是樸素的寫法：可選的 `+` 或 `-`，數位，可選的小數點。`bar` 和 `line` 的負數畫在零線下面。`bar` 的座標軸永遠從 0 開始，不會截斷，並停在不小於最大值的第一個整齊刻度上。`line` 的座標軸用整齊的刻度覆蓋資料，可以從 0 以上開始，因為折線表示的是位置，不是長度；最小值不超過最大值的三分之一，或者數值碰到或跨過 0 時，它從 0 開始。
+- `unit=` 原樣加在座標軸刻度和數值標記後面：`unit=%` 得到 `40%`，`unit=ms` 得到 `40ms`，`unit=" ms"` 得到 `40 ms`。面板標題就是圖表標題，所以沒有 `title=`。
+- 標記前的 `*` 高亮這一行。`bar` 只有一個系列時它的柱子用強調色，有多個系列時保留各系列的顏色，其他柱子變成灰色。`line` 裡這一行的點變大並顯示數值，再畫一條細的虛線參考豎線標出位置；折線保持原來的顏色，不會變灰。有多個系列時，這一行的數值排成一列放在參考線旁邊，各用自己系列的顏色。`pie` 裡這一塊保持自己的顏色，其他塊變成灰色。
+- 有多個系列時圖表帶圖例。最多 12 根柱子時，柱子上顯示數值。豎直圖裡的長標記會先傾斜，再縮短。
+- `line`：每一行是橫軸上的一個位置，第一行在最左邊。只有一個系列、最多 12 個點時，每個點都顯示數值；點更多時只有高亮的那一行顯示。點很多時，橫軸標記會隔一個、兩個或更多個顯示一個，避免重疊。
+- `pie`：每行只有一個數位，所以第一行最多給一個系列名。數值要大於等於 0，且至少有一個大於 0。最多寫 6 塊，每塊對應一種系列顏色。各塊從 12 點鐘方向開始，按寫的順序順時針排列。環形圖旁邊的列表給出每塊的顏色、標記、數值和百分比。百分比取整；某一塊小到取整會顯示 0% 時，保留一位小數。總數寫在環形圖中間。寫了 `unit=%` 時，數值本身就是佔比：列表只顯示標記和數值，表格沒有佔比列，環形圖中間留空。
+- 圖表下面有一張預設折疊的表格，放著所有數位；`pie` 的表格還有一列佔比。讀屏軟體可以讀它，讀者也可以從裡面複製。它的標題跟隨頁面語言。
+- 從右到左的頁面會鏡像圖表：第一行在右邊，水平柱子向左長，餅圖逆時針排列、列表在左邊。數位仍然從左到右。
+- 系列顏色是主題變數（`--series-1` 到 `--series-6`，見[圖表變數](#圖表變數)）。沒有圖表的頁面不帶圖表樣式。
+- 在 `am video` 的場景裡，圖表像 `limits` 一樣逐行出現：`line` 每次加上各系列的一個點，`pie` 每次加上一塊。
+- 單元格個數不對、值不是數位、餅圖裡有負數或全是 0、超出上限，都會報錯，並帶上行號和正確的例子。
+
+完整寫法：`am help chart`。
+
+## 不經過 Agent，直接用命令列
+
+CLI 就是 skill 目錄裡的 `scripts/am.mjs`：
+
+````bash
+AM=skills/answer-me-with-html/scripts/am.mjs
+
+node $AM render examples/tcp.md                  # 渲染並用瀏覽器打開
+node $AM render notes.md -o out.html --no-open   # 指定輸出位置，不自動打開
+node $AM render notes.md --theme shadcn          # 這一次換主題
+node $AM patch page.html --panel "為什麼是三次" < panel.md   # 只換一個 ## 面板，覆蓋原 HTML
+node $AM lint notes.md                           # 只做寫作檢查
+node $AM list                                    # 列出所有元件
+node $AM config                                  # 查看組態
+
+# 從 stdin 讀取，Agent 就是這樣呼叫的
+node $AM render - <<'AM_EOF'
+## A 一個面板
+```flow
+A -> B: 你好
+```
+AM_EOF
+````
+
+`am patch --panel` 按標題、字母 ID 或「ID 標題」找面板。穩定的定位鍵是明確字母 ID（`## B 標題`）：改了標題它也不變。沒寫明確 ID 的面板會分到下一個空閒字母，所以在它前面加減面板時，它的 ID 會變。要給面板改名，就 patch 這個面板，新草稿用新標題行開頭，比如 `## B 新標題`；不需要 `--replace`。
+
+頁面重新渲染後，自動 ID 可能已經指向另一個面板。這時按字母 patch 會改錯面板，而且沒有警告：工具分不清這是改錯了還是改名。要按字母 patch，先在草稿裡給面板寫明確字母。
+
+頁面預設儲存在 `~/.answer-me-with-html/pages/`。環境變數 `AM_HOME` 可以改位置。會話不能寫入該位置時（宿主沙箱只允許寫工作區），不帶 `-o` 的 `am render` 和 `am video` 會改為把頁面存到系統臨時目錄裡的私有資料夾（`answer-me-with-html-<uid>/pages/`，權限 0700；不是當前使用者私有的資料夾會被拒絕使用），並給出提示；系統可能會清理該資料夾。`am clean` 和 `--replace` 同樣覆蓋這個資料夾，`am serve` 不覆蓋。`am patch` 不會改位置。不帶 `-o` 的頁面和影片按與儲存草稿相同的規則命名（見下文）：`<名稱>-<時間>.html`，所以標題全是中文的草稿可以用 `file: tcp-handshake` 得到可讀的檔名。`-o` 指定的是檔案，不是資料夾；建議寫成 `page.html`。明確指定不帶擴充名的檔名仍可使用，CLI 會提示建議加上 `.html`。帶 STE 或程式碼警告的頁面不會自動在瀏覽器裡打開（加 `--open` 仍可打開）。渲染失敗時會一次列出草稿裡的全部錯誤（按行號排序），不寫頁面。草稿來自 stdin（`am render -`）且有錯誤或警告時，會存成資料目錄下的 `drafts/<名稱>-<時間>.md`（名稱取自草稿的 `file:` 欄位；沒有該欄位、或其中沒有 ASCII 字母和數位時取自標題：只保留小寫 ASCII 字母和數位，其他字元連續出現時合成一個 `-`，最多 24 個字元，沒有可用字元時用 `page`），輸出裡有 `draft: <路徑>`；行號與該檔案一致，只改被標出的行，再執行 `am render <路徑>`。`drafts/` 裡的草稿在無警告渲染後自動刪除；以檔案參數給出的草稿不會被複制。改好草稿後再渲染，執行 `am render … --replace <頁面>`：新頁面寫好後會刪掉上一版，所以每個回答在 `pages/` 裡只留一份。預設資料夾只有你自己的使用者能進入（權限 0700），共用主機上的其他使用者讀不到你的頁面；已經存在的 `AM_HOME` 資料夾保持原有權限。
+
+## 匯出頁面
+
+`am export` 把渲染好的頁面匯出成 A4 PDF、PNG 切片，或者兩者都要。發到聊天工具時，`.html` 檔案只會顯示成原始碼，圖片和 PDF 才能直接看。
+
+```bash
+am export page.html --pdf page.pdf
+am export page.html --png out/      # out/page-1.png、out/page-2.png……
+am export page.html --pdf page.pdf --png out/
+```
+
+- `--pdf`：按頁面自己的 `@media print` 規則印成 A4，保留背景色，不加頁眉頁腳。
+- `--png`：用螢幕媒體、1200 CSS px 寬、2 倍像素（2400 px）渲染，隱藏工具欄、回覆和批註按鈕、新版本提示等交互部件，再切成每張不超過 1800 CSS px 高的切片。切口落在面板之間的空隙裡；高過 1800 CSS px 的面板會按上限切開，文字可能分到兩張 PNG 裡。目錄不存在時會建立。再次匯出到同一目錄時，會刪掉這次沒有重新寫出的 `<頁面名>-<n>.png`，頁面變短後不會留下舊切片。其他檔案、其他名字和其他擴充名都保留。切片本身就是輸入頁面，或者刪不掉時，檔案留在原地，命令會報告。同一頁面不要同時往一個目錄匯出兩次，否則一次的清理可能刪掉另一次剛寫出的切片。
+- 兩個參數至少要給一個。頁面必須是已存在的 `.html` 檔案。
+- 需要 Chrome / Chromium / Edge 和 Node.js 22 或更新版本（內建 `WebSocket`），和 `am video --mp4` / `--webm` 一樣；不在常見位置時用 `AM_CHROME` 指定。
+- PDF 或 PNG 是圖片：頁面上的回覆、批註、主題切換和 Before/After 切換在圖片裡都不能用。
+
+## 語言
+
+稿件的語言決定頁面的 `lang` 屬性、按鈕和主題名的語言、字體，以及影片播放器的文字。可以在稿頭用 `lang:` 指定。不寫時，工具按正文的文字系統識別語言。
+
+| `lang:` | `<html lang>` | 文案和字體 |
+| :--- | :--- | :--- |
+| `zh`、`zh-CN`、`zh-Hans` | 按你寫的（單獨的 `zh` 寫成 `zh-CN`） | 簡體中文 |
+| `zh-Hant`、`zh-TW`、`zh-HK`、`zh-MO` | 按你寫的 | 繁體中文，繁體字體排在前面 |
+| `en`、`en-US` 等英文標記 | 按你寫的 | 英文 |
+| `ja`、`ja-JP` | 按你寫的 | 日文，日文字體排在前面 |
+| `he`、`he-IL` | 按你寫的 | 希伯來文，希伯來文字體排在前面；頁面從右到左 |
+| 其他標記，如 `fr`、`ko` | 按你寫的 | 英文文案 |
+
+標記按你寫的原樣輸出：`zh-tw` 和 `zh_TW` 都會寫成 `zh-TW`。空值、`und` 或無效的值會被忽略，由正文決定。
+
+從右到左書寫的語言（`he`、`ar`、`fa`、`ur`、`yi`）還會得到 `<html dir="rtl">`。頁面整體鏡像：正文、面板、表格、大綱條（`left` 和 `right` 隨之鏡像）和工具欄都從右側開始；`flow`、`state`、`er` 和 `sequence` 圖按鏡像繪製，第一個節點或參與者在右邊，箭頭指向左邊；時間線、樹和限制條也從右側開始。程式碼塊、diff 和行內程式碼保持從左到右；不含從右到左字母的文字片段（如路徑 `src/`、標記開頭的鍵 `lint:`、域名、帶符號的數位）也保持從左到右，標點留在原來寫的位置。希伯來文有自己的介面文案、常用稿頭鍵（`author`、`date`、`source`、`version` 等）的希伯來文名稱，以及“日.月.年”格式的生成日期；其他從右到左的語言使用英文文案。影片頁（`am video`）遵循同一規則：標題塊、各場景、字幕、和章節條都從右側開始，整個控制欄（播放鍵、時鐘、進度條、倍速和匯出）則像常見播放器那樣保持從左到右。匯出的 MP4 和 WebM 帶有鏡像後的畫面。
+
+| 正文的文字 | 識別為 |
+| :--- | :--- |
+| 漢字 | `zh-CN`（簡體）；只在繁體裡出現的字比只在簡體裡出現的字多時，識別為 `zh-Hant` |
+| 漢字加假名 | `ja` |
+| 諺文 | `ko` |
+| 西里爾、阿拉伯、希伯來、泰、希臘文字 | `ru`、`ar`、`he`、`th`、`el`（取該文字最常見的語言） |
+| 拉丁字母 | `en` |
+
+寫英文以外的拉丁字母語言時，請明確宣告語言。中文太短或太平淡、看不出繁體字時（兩種寫法共用的字什麼都說明不了，會按簡體處理），也請宣告。需要精確語言時同樣要宣告：阿拉伯文字也用來寫波斯語，西里爾文字也用來寫烏克蘭語。
+
+打補丁（`am patch`）的頁面會保留原來的語言，除非稿件裡宣告瞭語言。
+
+圖表裡的文字按各自文字系統的單位換行：漢字、假名和全形字元一字一單位；用空格分詞的文字按詞換行；不用空格分詞的文字（泰文、老文、高棉文、緬甸文）按詞典分詞，長句不會把節點撐寬。整行放不下的詞會退回到按字形簇（grapheme）拆分，組合符號不會和基字元分開。在 `flow` 或 `state` 的節點或邊標記裡寫字面量（Literal） `\n` 可以強制換行；強制換行後的每一行仍按寬度換行。分組標題保持原樣，不參與換行。
+
+寫作檢查按語言走。中文、英文和日文保持原有規則。其他語言只用語言中立的規則：句長（按詞數計，中日文按字數計）和段長。不用空格分詞的文字，按分詞器找到的詞計句長，和圖表換行用的是同一份文字列表。
+
+## 自訂主題
+
+在 `~/.answer-me-with-html/themes/` 裡放 JSON 檔案，一個檔案就是一個主題，檔名就是主題名：`themes/notes.json` 對應主題 `notes`。選擇方式和內建主題相同：在稿件裡寫 `theme: notes`，或者用 `--theme notes`、`am config set theme notes`。Agent 寫的稿件不變，所以自訂主題不會給每次回答增加成本。
+
+```json
+{
+  "label": { "zh": "筆記", "en": "Notes", "ja": "ノート" },
+  "tokens": {
+    "common": { "--font-sans": "\"IBM Plex Sans\", \"Noto Sans CJK SC\"" },
+    "light": { "--bg": "#f7f5ef", "--paper": "#fffdf8", "--ink": "#1f1d1a" },
+    "dark": { "--bg": "#14130f", "--paper": "#1c1b17", "--ink": "#eeeae0" }
+  },
+  "css": "& .am-panel-head { letter-spacing: 0.01em; }"
+}
+```
+
+- 亮色和暗色都要寫全所有顏色變數。`am help theme` 會列出這些變數，並給出完整格式。
+- 字體只能寫本機已安裝的字體。系統會自動加上預設字體作為回退，沒裝這些字體的讀者也能正常閱讀。
+- `css` 裡每條選擇器都以 `&` 開頭。`&` 代表主題的根節點，這樣這些規則只在這個主題下生效。
+- 頁面字號跟隨讀者的 `scale` 設定。用 `var(--am-fs-*)`（頁面文字尺寸）或 `calc(Npx * var(--am-scale, 1))`；工具欄保持自己的大小。
+- `font`（可選）寫本工具自帶的字體名。每個帶上這個主題的頁面都會內嵌該字體，讀者在工具欄切換過去就能看到，不需要聯網；沒有帶這類主題的頁面不會變大。目前只有 `bangers`（[Bangers](https://github.com/googlefonts/bangers)，SIL OFL 1.1）；在 `css` 裡使用它的字體族，例如 `& .am-head h1 { font-family: "Bangers", Impact, sans-serif; }`。不認識這個欄位的舊版本會忽略它，顯示回退字體。影片頁面不內嵌這個字體。
+- `requires`（可選）寫主題支援的最低版本，格式 `x.y.z`。版本更低時，這個主題會被跳過，並提示 `needs Answer me with HTML x.y.z or newer`；不認識這個欄位的舊版本會忽略它。
+- 檔案要自成一體：不要寫指向 `http:`、`https:` 或 `//` 的 `url()` 或 `image-set()`，不要 `@import`，不要 `@font-face`，也不要用反斜槓轉義（轉義可以繞過檢查）。外鏈會在每次打開頁面時發出請求，而頁面要能離線使用。`am theme check` 會對這些情況給出警告，已有的主題仍然可用；主題庫和 `am theme add` 會拒收它們。
+- 每個頁面都內嵌了內建主題和所有已安裝的使用者主題，工具欄的選擇器裡都能選到，所以換一台電腦也能打開。
+- `am theme check notes` 會檢查亮暗兩套配色裡缺少的變數、無效的顏色值和過低的對比度，對外部資源給出警告，並生成兩頁包含全部元件的樣張。
+
+`css` 可以選中的類名保持穩定：以後的版本會保留其中每一個，也不會再新增必填的顏色變數。
+
+| 部分 | 類名 |
+| :--- | :--- |
+| 頁面頭部 | `.am-head`、`.am-head h1`、`.am-head-meta`、`.am-intro` |
+| 面板 | `.am-panel`、`.am-panel--bare`、`.am-panel-head`、`.am-panel-head h2`、`.am-panel-id`、`.am-panel-meta`、`.am-panel-body` |
+| 內容 | `.am-md`、`.am-callout`、`.am-callout--ok`、`.am-callout--warn`、`.am-callout--err`、`.am-callout-title`、`.am-kv` |
+| 繪圖框 | `.am-frame`、`.am-ruler` |
+| 評論按鈕 | `.am-comment-btn`、`.am-comment-btn--on` |
+
+### 圖表變數
+
+主題可以用變數（而不是選擇器）改變圖表內部的樣子：flow、state、sequence、er，tree 的方框，以及 chart 的柱子、折線和扇區。把它們寫進 `tokens`，所有圖表都會跟著變。這些變數全部可選：一個都不寫的主題，圖表和以前完全一樣；舊版本會忽略它們。
+
+| 部分 | 變數 | 預設值 |
+| :--- | :--- | :--- |
+| 節點（flow、state、er、tree 方框） | `--node-fill`、`--node-stroke`、`--node-width`、`--node-radius`、`--node-shadow`、`--node-text` | `--paper`、`--line`、`--bw`、3px（state：8px；tree 方框：`--radius`）、無、`--ink` |
+| 高亮節點（`*`） | `--hi-fill`、`--hi-stroke`、`--hi-text` | `--accent-bg`、`--accent`、`--accent` |
+| 連線與訊息 | `--edge-color`、`--edge-width`、`--edge-label` | `--ink-2`、1.3、`--accent` |
+| 時序圖參與者（含 `== 分隔 ==` 的框） | `--actor-fill`、`--actor-stroke`、`--actor-text` | `--node-fill`、`--node-stroke`、`--node-text` |
+| 時序圖備註 | `--note-fill`、`--note-stroke`、`--note-width`、`--note-radius` | `--warn-bg`、`--warn`、1、2px |
+| 分組框（flow） | `--cluster-fill`、`--cluster-stroke` | `--fill`、`--line-2` |
+| 生命線 | `--lifeline-color` | `--ink-3` |
+| 圖表系列（`chart`） | `--series-1`、`--series-2`、`--series-3`、`--series-4`、`--series-5`、`--series-6` | 亮色：`#4e79a7`、`#f28e2b`、`#e15759`、`#76b7b2`、`#59a14f`、`#b07aa1`；暗色：`#7aa6d6`、`#f5a55a`、`#ef7f80`、`#8fd0cb`、`#7cc472`、`#c99bbd` |
+
+- `--node-width`、`--edge-width`、`--node-radius`、`--note-width`、`--note-radius` 寫數位或 `px`、`em` 值（單獨的數位按 px 算）。`--node-radius` 也會圓角化參與者，不改變膠囊形和菱形。`--node-shadow` 寫 `none` 或一個以上的 `drop-shadow(...)`，例如 `drop-shadow(3px 3px 0 #111111)`，參與者也會帶這個陰影。其他寫法算錯誤，主題會被跳過。
+- 顏色可以是任何 CSS 顏色。亮色和暗色下，`am theme check` 會讀下面這些配對，要求 4.5:1，而且只在主題設定了其中一邊時才檢查：`--node-fill` 上的 `--node-text`、`--hi-fill` 上的 `--hi-text`、`--actor-fill` 上的 `--actor-text`、`--note-fill` 上的 `--ink`、`--paper` 上的 `--edge-label`。暗色模式裡沒寫的變數沿用亮色的值，所以兩邊都寫。
+- 系列顏色按圖形讀取，不按文字讀取。當某個 `--series-N` 與 `--paper` 之間不到 3:1（亮色或暗色），`am theme check` 會給出警告，而且只在主題設定了這個變數時才檢查。這是警告而不是錯誤，因為柱子上有數值，圖例和資料表也寫明瞭每個系列。一個都不寫的主題用預設配色；其中有幾種顏色（橙色和青色）在白色的 `--paper` 上低於 3:1。
+- 變數的值和 `css` 一樣要過外部資源檢查：不要指向 `http:`、`https:` 或 `//` 的 `url()`、`image-set()`，也不要反斜槓。`am theme check` 會警告；主題庫和 `am theme add` 會拒收。
+- 圖表裡的字體族、字號、字重和字距沒有變數。CLI 按無襯線字體測量圖表文字，換字體會讓文字溢出方框。
+- 圓角需要 Safari 17.4 或更新版本；更舊的 Safari 畫預設圓角。
+
+### 主題庫
+
+[answer-me-with-html.com/zh/themes/](https://answer-me-with-html.com/zh/themes/) 展示現成的主題，每個都在瀏覽器裡實時渲染亮色和暗色，並附上安裝命令：`comic`、`manga` 和 `pop`，它們使用 Bangers 字體。主題庫裡的主題就是主題資料夾裡的一個檔案；裝好之後，每個新頁面的工具欄主題選擇器裡都會出現它。主題清單在 [/themes/index.json](https://answer-me-with-html.com/themes/index.json)（每個檔案的名字、版本、大小和 sha256），檔案本身在 [`marketplace/themes/`](../marketplace/themes)。想做一個主題並提交到主題庫，讓你的 agent 按 [/themes/make.md](https://answer-me-with-html.com/themes/make.md) 的步驟做；其他方式（網站編輯器、issue 表單或 PR）見 [CONTRIBUTING.md](../CONTRIBUTING.md#theme-catalog)。
+
+
+#### 安裝主題：`am theme add`
+
+```bash
+am theme add comic --use       # 下載、檢查並儲存主題，同時設為預設主題
+am theme list [--remote]       # 內建主題，以及你的主題（帶版本和來源）
+am theme update [name]         # 更新來自主題庫的主題
+am theme remove <name>         # 刪除一個主題檔案
+```
+
+- `am theme add <name>` 讀取主題庫清單（`https://answer-me-with-html.com/themes/index.json`，或環境變數 `AM_CATALOG_URL` 指向的地址：只接受 https，或指向 `localhost`、`127.0.0.1`、`[::1]` 的 http，因為明文 http 下清單和檔案可以被一起替換，sha256 就起不到作用；重定向到不符合這條規則的地址會被拒絕），從同一個地址下載 `themes/<name>.json`，並按清單核對大小和 sha256。隨後做主題庫 CI 的同一套檢查：是有效的主題檔案、沒有對比度錯誤、沒有外部資源。檔案先寫入臨時檔案再改名儲存到 `~/.answer-me-with-html/themes/<name>.json`，中途中斷不會留下半個檔案。只接受主題庫裡的名字，不接受網址或路徑。`requires` 高於當前版本的主題會被拒絕，並說明需要哪個版本。網路請求 8 秒超時。
+- `--use` 同時設為預設主題，等同 `am config set theme <name>`，不會再問別的。不加時，裝好的主題也已經出現在每個新頁面的主題選擇器裡；之後可以用 `am config set theme <name>` 設為預設。
+- 同名檔案如果不是主題庫給的那份，永遠不會被覆蓋，因為它可能是你自己的主題：命令會停下並提示 `--force`。完全相同的檔案會提示已經安裝。如果檔案仍然和主題庫給的一模一樣，新版本會直接替換，不需要 `--force`。
+- 每個主題的來源記在資料目錄的 `state.json` 裡（`catalogThemes`：名字、已安裝檔案的版本和 sha256）。主題資料夾裡只放主題檔案。沒有記錄的檔案算你自己的（`local`）。
+- `am theme list` 不聯網。安裝後被你改過的檔案顯示為 `catalog, edited`。加 `--remote` 會再讀取主題庫，標出有更新的主題和你還沒有的主題。
+- `am theme update` 更新每個來自主題庫且安裝後沒改過的主題；你改過的檔案會被跳過並給出提示（`am theme add <name> --force` 可替換）。`am theme update <name>` 只更新一個。
+- `am theme remove <name>` 刪除檔案和它的記錄（內建主題不能刪）。如果它是預設主題，預設值會回到 `auto`。已經生成的頁面外觀不變，因為頁面內嵌了生成時帶的主題。
+- 輸出裡只有主題名和版本號。主題庫裡的標記和描述是給網站看的，命令不會輸出，所以主題庫裡的文字進不了 agent 的上下文。
+- 0.5.3 之前的版本沒有 `am theme add`：按主題庫頁面上的方式手動儲存檔案（`curl` 或 PowerShell）。
+
+## 在遠端機器上打開頁面
+
+如果 Agent 跑在遠端機器或無介面的機器上，可以用 `am serve` 讓你在自己的瀏覽器裡透過 `http://` 打開它生成的頁面。在那台機器的終端裡執行，並保持執行：
+
+````bash
+am serve              # http://127.0.0.1:8765，Ctrl-C 停止；--port N 改連接埠（0 表示自動選一個空閒連接埠）
+ssh -L 8765:127.0.0.1:8765 user@host   # 在你自己的電腦上執行，然後在瀏覽器裡打開連結
+am serve --lan        # 同時監聽區域網路（0.0.0.0），只在可信網路裡使用
+am serve --public-url https://pages.example.com   # 連結使用這個地址，用於已加上 TLS 的反向代理或隧道
+am serve --tailscale  # 只監聽 Tailscale 地址；tailnet 內的任何設備都能打開連結
+````
+
+- 執行期間，`am render`、`am patch` 和 `am video` 寫入 `~/.answer-me-with-html/pages/` 或 `videos/` 的頁面會多輸出一行 `link:`，Agent 會把這個連結交給你，而不是 `file://` 連結。
+- 預設服務只監聽 `127.0.0.1`，推薦透過 SSH 隧道存取。沒有密碼，也沒有 TLS。
+- `--lan` 讓服務監聽 `0.0.0.0`，也就是全部 IPv4 網卡，而不只是連結裡的地址，同一網路裡的其他電腦就能打開連結。它會輸出所有區域網路地址並給出警告，連結使用第一個地址：192.168.x.x 優先，其次 10.x.x.x，再其次 172.16-31.x.x。連線是明文 HTTP，連結裡的令牌就是持有者憑證，同一網路裡能看到流量或連結的人都能打開頁面，所以只在有防火牆保護的可信網路裡使用。
+- `--public-url https://host` 用於你自己放在 `am serve` 前面、並已加上 TLS 的反向代理或隧道。它決定 `link:` 行開頭的地址，以及服務接受的 `Host` 名稱；它不會建立 TLS，也不會自己開放任何連接埠。只能給出 origin，不能帶路徑。不加 `--lan` 時服務仍只監聽 `127.0.0.1`，所以代理必須和它在同一台機器上，並且要保留原始的 `Host` 頭。
+- `--tailscale` 只監聽這台機器的 Tailscale IPv4 地址（不是 `0.0.0.0`，也不是 `127.0.0.1`），所以只有你 tailnet 裡的設備能連上。連結以 MagicDNS 名稱開頭（`http://<機器名>.<tailnet>.ts.net:<連接埠>`），MagicDNS 關閉時用 Tailscale 地址。連線是明文 `http://`，但 tailnet 內的流量由 WireGuard 加密。它讀取 `tailscale status --json`，不會改動任何 Tailscale 組態。需要 `tailscale` CLI 在 `PATH` 裡（macOS 上也可以用 App 自帶的 CLI），並且 Tailscale 已登入、正在執行。不能與 `--lan` 或 `--public-url` 同用。連結在重啟後仍然有效：密鑰儲存在 `~/.answer-me-with-html/serve-secret`，所以手機上的書籤不會失效；要讓所有連結失效，先停掉服務，刪除該檔案，再重新啟動。如果監聽時報 "cannot assign requested address"（Tailscale 的 userspace-networking 模式沒有網卡），tailnet 設備請用下面的 HTTPS 做法；`--lan` 只能讓同一區域網路的設備存取。
+- `--secret-file <路徑>` 把連結密鑰存在檔案裡，而不是每次啟動都新生成，所以連結在重啟後仍然有效。檔案內容是 64 個小寫十六進制字元，只有你自己能讀（權限 0600）；檔案不存在時會自動建立。組或其他使用者可讀的檔案會被 `am serve` 拒絕。
+- 已開啟 HTTPS 證書的 tailnet 上用 HTTPS：執行 `tailscale serve --bg 8765`，再執行 `am serve --public-url https://<機器名>.<tailnet>.ts.net`。`tailscale serve` 會原樣傳遞 `.ts.net` 的 `Host`，這正是 `--public-url` 接受的名稱。開啟 HTTPS 會把你的機器名公布到證書透明度（Certificate Transparency）記錄裡（[詳情](https://tailscale.com/kb/1153/enabling-https)）。`tailscale serve --https=443 off` 可以撤銷。
+- 在手機上，`http(s)` 連結裡的 Reply 作答、評論和批註會邊輸入邊存到伺服器端，所以瀏覽器丟棄的標記頁再打開同一條連結時仍然能看到它們。只有伺服器端保留密鑰（`--secret-file` 或 `--tailscale`）時，重啟過的 `am serve` 才能找回它們：連結不變，而新的密鑰會生成一條找不到舊記錄的新連結。它們存在 `~/.answer-me-with-html/serve-state/`（每頁一個檔案，以頁面 token 的哈希命名，只能通過該 token 讀到）；頁面重新渲染後不再恢復它們，舊記錄會一直留到 `am clean` 把它刪除。從 `file://` 打開的頁面仍像以前一樣存在瀏覽器的本地儲存裡。
+- 不加這些參數時，服務只回應 `localhost`、`127.0.0.1` 和 `[::1]`，請求其他主機名或 IP 一律返回 404。不要把這個連接埠暴露到公網。
+- 連結按頁面區分：每個連結只帶這一頁的令牌，打不開別的頁面；服務重啟後所有舊連結失效，除非密鑰存在檔案裡（`--tailscale`、`--secret-file`）。服務不列目錄，只提供 `.html` 檔案。
+- 把連結當作這一頁的密碼：能連到這個連接埠、又拿到連結的人都能打開頁面，包括同一台機器上的其他使用者。不要把連結發給別人。
+- 給隧道單獨用一個本機連接埠。不要複用曾經打開過其他服務或其他主機頁面的連接埠：那些頁面可能在瀏覽器裡為這個地址留下了 service worker，之後在這個連接埠上打開的頁面它都能看到。
+- 每個頁面在瀏覽器裡各自隔離，一個頁面的指令碼讀不到其他頁面。因此透過 `http://` 連結打開時，Reply 裡的選擇、評論和批註會邊輸入邊存到伺服器端，關掉頁面再打開同一條連結就能看到（見下面的 `am serve`）。
+- 頁面檔案變了（比如 `am patch` 之後，或重新渲染到同一個檔案），打開著的頁面會自動重新整理，並停在原來的滾動位置。如果你已經在頁面上做了選擇、寫了批註或做了標註，頁面不會自動重新整理，而是顯示「頁面已更新 · 重新整理」，讓你先複製回覆。這是服務在發送頁面時加上的，檔案本身不變：用 `file://` 打開的頁面不會自動重新整理。頁面用自己連結裡的令牌監聽 `/e/<令牌>/<檔案>`，這個連線只傳「已變化」，不傳頁面內容。
+
+## 更新與清理
+
+**更新**：需要手動更新，但有新版本時會提醒你。工具每天在後台向 GitHub 查詢一次最新版本號和這個版本的亮點，不上傳任何內容，也不會拖慢你要的頁面。有新版本時，下一次出頁面會附一行提示，Agent 會問你要不要更新。過時期間生成的每個頁面，工具欄最前面還會多一個「新版本」按鈕，點開能看到新版本最多 3 條亮點（跟頁面同一種語言）、更新命令和複製按鈕。用 `am serve --lan` 或 `--public-url` 分享給別的設備時，`am serve` 會把按鈕去掉；頁面本身也不聯網。關掉提醒：`/answer-me-with-html:config update_check off`。
+
+| 安裝方式 | 更新方法 |
+| :--- | :--- |
+| `npx skills add` | `npx skills update answer-me-with-html -y`，或直接對 Agent 說"更新一下 answer-me-with-html" |
+| `git clone` + `npm link` | 在倉庫目錄執行 `git pull && npm install` |
+| DeepSeek Harness 外掛 | `dsh plugin --profile <profile> up <package>`；更新提示會自動填好 profile 和包名 |
+| Claude Code 外掛 | 終端執行 `claude plugin update answer-me-with-html@answer-me-with-html`（或在 `/plugin` → Installed 裡點 Update now），再 `/reload-plugins`。想自動更新，就在 `/plugin` → Marketplaces 裡給這個外掛市場打開自動更新。第三方外掛市場預設不自動更新 |
+
+**清理**：頁面、影片和配音快取都存在 `~/.answer-me-with-html/`。目錄超過 200 MB，或超過 20 MB 且 30 天沒清理過，Agent 會問你要不要清理，每週最多問一次。沒有你的同意，什麼都不會刪。
+
+- `/answer-me-with-html:clean`（外掛），或者直接說"清理一下頁面"：先預演，再問你。
+- `am clean`：刪除 30 天前的頁面、影片和存下的草稿，清空配音快取。`--days N` 改天數，`--all` 刪除全部頁面、影片和草稿，`--dry-run` 只看不刪。組態和主題始終保留。如果 `pages`、`videos` 或 `cache` 本身是軟連結，會被跳過：`am clean` 不會碰連結指向的檔案，用量統計和清理提示也不再計入。如果這些目錄無法遍歷（比如沒有讀權限），同樣會被跳過：其中的檔案不計入用量統計和清理提示，顯示的大小可能低於實際佔用，清理也不會刪除它們。
+
+**舊的高頻模式外掛。** 倉庫裡已經刪掉它，但你本機的副本會一直注入提醒，直到你卸載。先執行 `/plugin uninstall answer-me-with-html-always@answer-me-with-html`，再按 [README](../README.zh-TW.md#高頻模式推薦) 加上高頻模式的規則。
+
+## 組態
+
+| 組態項 | 預設值 | 作用 |
+| :--- | :--- | :--- |
+| `open` | `on` | 生成後自動用瀏覽器打開。嫌彈窗打擾就關掉 |
+| `theme` | `auto` | 預設主題：`auto`（長文用 paper，有圖表用 blueprint）、`blueprint`、`shadcn`、`paper`，或你自己的主題 |
+| `mode` | `auto` | 預設明暗：`auto`、`light` 或 `dark` |
+| `style` | `80` | 寫作檢查：`off`、`80`（只提醒）或 `strict`（不達標不生成） |
+| `scale` | `1` | 頁面文字大小：0.8–1.5，步長 0.05。1.2 表示放大 20%；圖表跟著變大。工具欄的 A− / A+ 也能調整；選擇會記在這個瀏覽器裡，並優先於這個設定，但在 `am serve` 下只在當前標記頁內有效 |
+| `update_check` | `on` | 每天向 GitHub 查一次新版本並提醒你，不會自己更新 |
+| `close_after_reply` | `off` | 複製回覆後 3 秒關閉頁面標記頁，帶倒計時和「保持打開」按鈕。見下方說明 |
+| `colophon` | `on` | 在標題上方顯示「Generated by Answer me with HTML · 時間 · ★ Star on GitHub」這一行。設為 `off` 後，之後生成或 patch 的頁面不再帶這一行；`generator` meta 標記保留 |
+| `voice` | `auto` | 影片配音：`auto`（有 `ELEVENLABS_API_KEY` 用 ElevenLabs，否則用系統語音）、`elevenlabs`、`local`、`system` 或 `off` |
+
+組態儲存在 `~/.answer-me-with-html/config.json`。稿件裡寫明的主題優先於預設值。`--open` 和 `--no-open` 只影響這一次。
+
+`close_after_reply` 只對開啟期間生成的頁面生效。`am serve` 提供的頁面會把作答存在伺服器端，所以開啟後作答不會隨標記頁一起消失，剪貼板裡仍有回覆。頁面裡的連結（比如目錄連結）跳轉過之後，瀏覽器會拒絕關閉標記頁，這時頁面會提示你自己關閉。
+
+## 少一點主動
+
+預設情況下，只要頁面更好懂，agent 就會出頁面。嫌太多的話，有兩種辦法。兩種都不要和高頻模式同時用。
+
+**只在你用話要求時出。** 把這條規則加到你的規則檔案裡，例如 `~/.claude/CLAUDE.md` 或 `AGENTS.md`：
+
+> 除非我要求生成頁面、圖示或視覺化講解，或者說我沒看懂，否則不要使用 answer-me-with-html skill。
+
+這條規則在更新後還在。agent 仍然看得到這個 skill，所以靠自己的判斷遵守規則。
+
+**只用斜槓命令觸發（Claude Code）。** 在已安裝的 `SKILL.md` 的 frontmatter 里加一行 `disable-model-invocation: true`，例如 `~/.claude/skills/answer-me-with-html/SKILL.md`。之後 agent 完全看不到這個 skill，只有你輸入 `/answer-me-with-html` 才會出頁面。更新會替換這個檔案，更新後要重新加這一行。見 [Claude Code skills 檔案](https://code.claude.com/docs/en/skills)。
+
+## 寫作檢查
+
+Answer me with HTML 把其中容易用機器檢查的部分做成了中英雙語版，每次渲染時順帶檢查：
+
+- **句長:** 操作步驟不超過 20 個英文詞或 35 個漢字，描述性句子不超過 25 詞或 45 字。每段最多 6 句。
+- **用詞:** 英文換成常見詞，比如 utilize 改成 use、prior to 改成 before。中文刪掉虛動詞，比如"進行優化"直接寫"優化"。
+- **句式:** 提示英文步驟裡的被動語態（描述句可以用被動）、一句裡用了三個以上的"的"、"賦能""閉環"這類套話，以及"下面我來""希望對你有幫助"這類開場白和結尾。
+- **中文詞表:** 錯別字（登陸→登錄）、含糊的量詞（儘快、若干、大概、多次）、數位後的"以上 / 以下 / 以內"，以及一詞多寫（單擊→點選、鍵入→輸入、入參→參數）。只收幾乎不會誤報的詞，取自[簡明技術中文](https://github.com/mzopedia/simplified-technical-chinese)，一套參照 STE 方法整理的中文受控寫作規範。
+- **日文:** 含假名的稿件按日文處理：頁面按鈕用日文，頁面帶 `lang="ja"`。只檢查句長和段長，字數上限同中文。要強制指定，在稿件裡寫 `lang: ja`。
+- **其他語言:** 其他語言只檢查長度：句子按詞數計（中日文按字數計），段落按句數計。英文和中文的詞表、被動語態規則都不會作用在它身上。
+
+用 `/answer-me-with-html:config style strict` 調整嚴格程度，或者在單篇稿件裡寫 `style:`。

@@ -28,8 +28,8 @@ Explore Zapply's Chrome extension for autofilling job applications, dedicated jo
 </p>
 
 <p align="center">
-  <a href="https://github.com/QingYunA/answer-me-with-html/releases"><img src="https://img.shields.io/github/v/release/QingYunA/answer-me-with-html?style=flat-square&logo=github&labelColor=16181d&color=2ea44f" alt="Release"></a>
-  <a href="https://github.com/QingYunA/answer-me-with-html/stargazers"><img src="https://img.shields.io/github/stars/QingYunA/answer-me-with-html?style=flat-square&logo=github&labelColor=16181d&color=2ea44f" alt="Stars"></a>
+  <a href="https://github.com/doggy8088/answer-me-with-html/releases"><img src="https://img.shields.io/github/v/release/doggy8088/answer-me-with-html?style=flat-square&logo=github&labelColor=16181d&color=2ea44f" alt="Release"></a>
+  <a href="https://github.com/doggy8088/answer-me-with-html/stargazers"><img src="https://img.shields.io/github/stars/doggy8088/answer-me-with-html?style=flat-square&logo=github&labelColor=16181d&color=2ea44f" alt="Stars"></a>
   <img src="https://img.shields.io/badge/works%20with-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%20OpenCode%20%C2%B7%20Pi%20%C2%B7%20DeepSeek%20Harness-2ea44f?style=flat-square&labelColor=16181d" alt="Works with Claude Code, Codex, Cursor, OpenCode, Pi, DeepSeek Harness">
   <a href="https://www.theagenticleaderboard.com/alternatives/answer-me-with-html/"><img src="https://www.theagenticleaderboard.com/badges/new/answer-me-with-html.svg" alt="The New 100"></a>
   <a href="https://ko-fi.com/yunqing_love"><img src="https://img.shields.io/badge/Ko--fi-support-ff5e5b?style=flat-square&logo=kofi&logoColor=white&labelColor=16181d" alt="Support on Ko-fi"></a>
@@ -37,7 +37,7 @@ Explore Zapply's Chrome extension for autofilling job applications, dedicated jo
 </p>
 
 <p align="center">
-  <a href="https://answer-me-with-html.com/"><b>Website</b></a> · <a href="#install">Install</a> · <a href="#what-you-ask-what-you-get">Examples</a> · <a href="#explainer-videos">Videos</a> · <a href="#always-on-mode-recommended">Always-on mode</a> · <a href="docs/reference.md">Reference</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a>
+  <a href="https://answer-me-with-html.com/"><b>Website</b></a> · <a href="#install">Install</a> · <a href="#what-you-ask-what-you-get">Examples</a> · <a href="#explainer-videos">Videos</a> · <a href="#always-on-mode-recommended">Always-on mode</a> · <a href="docs/reference.md">Reference</a> · <a href="README.zh-TW.md">繁體中文</a> · <a href="README.ja.md">日本語</a>
 </p>
 
 Once installed, ask questions the way you always do:
@@ -78,7 +78,7 @@ With this skill the model writes only a Markdown draft. For the same questions t
 
 <p align="center"><sub>The same question, the same model, answered both ways. Both pages are usable.</sub></p>
 
-The token counts are saved in [bench/corpus/tokens.json](bench/corpus/tokens.json), so `node bench/corpus.mjs` gives the same numbers every time. The pages themselves are a [download](https://github.com/QingYunA/answer-me-with-html/releases/download/v0.4.14/bench-corpus-2026-10-07.zip). The bill drops less than the writing, about 15% here, because every turn also reads the system prompt, your question and the conversation, with or without the skill. See [where the cost goes](bench/README.md#where-the-cost-goes).
+The token counts are saved in [bench/corpus/tokens.json](bench/corpus/tokens.json), so `node bench/corpus.mjs` gives the same numbers every time. The pages themselves are a [download](https://github.com/doggy8088/answer-me-with-html/releases/download/v0.4.14/bench-corpus-2026-10-07.zip). The bill drops less than the writing, about 15% here, because every turn also reads the system prompt, your question and the conversation, with or without the skill. See [where the cost goes](bench/README.md#where-the-cost-goes).
 
 Explainer videos save even more: about 18× fewer output tokens and 12× faster in [a small test](bench/README.md#explainer-videos).
 
@@ -90,16 +90,16 @@ You need [Node.js](https://nodejs.org/) 20 or newer. There is no `npm install` s
 
 Paste this into Claude Code, Codex, Cursor, OpenCode or any other agent:
 
-> Install Answer me with HTML: read https://raw.githubusercontent.com/QingYunA/answer-me-with-html/main/INSTALL.md and follow it.
+> Install Answer me with HTML: read https://raw.githubusercontent.com/doggy8088/answer-me-with-html/main/INSTALL.md and follow it.
 
-[INSTALL.md](INSTALL.md) is written for agents. It installs the plugin in Claude Code and the skill in other agents, keeps an existing install, asks you nothing unless Node.js is missing or older than 20, and ends with one report after checking the result with the TCP three-way handshake page. If your agent cannot open links, use `npx -y skills add QingYunA/answer-me-with-html -g -y -a <your agent name>` (for Claude Code, `-a claude-code`).
+[INSTALL.md](INSTALL.md) is written for agents. It installs the plugin in Claude Code and the skill in other agents, keeps an existing install, asks you nothing unless Node.js is missing or older than 20, and ends with one report after checking the result with the TCP three-way handshake page. If your agent cannot open links, use `npx -y skills add doggy8088/answer-me-with-html -g -y -a <your agent name>` (for Claude Code, `-a claude-code`).
 
 ### Claude Code plugin
 
 Run this inside Claude Code:
 
 ```
-/plugin marketplace add QingYunA/answer-me-with-html
+/plugin marketplace add doggy8088/answer-me-with-html
 /plugin install answer-me-with-html@answer-me-with-html
 ```
 
@@ -108,13 +108,13 @@ Run this inside Claude Code:
 Run this in a terminal, with the profile you run in (`web` is the shipped one):
 
 ```bash
-dsh plugin --profile web add github:QingYunA/answer-me-with-html
+dsh plugin --profile web add github:doggy8088/answer-me-with-html
 ```
 
 ### One command
 
 ```bash
-npx skills add QingYunA/answer-me-with-html
+npx skills add doggy8088/answer-me-with-html
 ```
 
 It asks which agents to install into. The installer, [vercel-labs/skills](https://github.com/vercel-labs/skills), supports more than 70 agents.
@@ -125,7 +125,7 @@ It asks which agents to install into. The installer, [vercel-labs/skills](https:
 Copy the `skills/answer-me-with-html` folder into your agent's skill folder. For Claude Code:
 
 ```bash
-git clone --depth 1 https://github.com/QingYunA/answer-me-with-html.git /tmp/answer-me-with-html
+git clone --depth 1 https://github.com/doggy8088/answer-me-with-html.git /tmp/answer-me-with-html
 cp -R /tmp/answer-me-with-html/skills/answer-me-with-html ~/.claude/skills/answer-me-with-html
 ```
 
@@ -296,7 +296,7 @@ Every render checks the parts a machine can check: sentence length, plain words,
 ## Development
 
 ```bash
-git clone https://github.com/QingYunA/answer-me-with-html.git && cd answer-me-with-html
+git clone https://github.com/doggy8088/answer-me-with-html.git && cd answer-me-with-html
 npm install
 npm test          # run the tests
 AM_E2E=1 npm test # also run end-to-end video tests (system TTS, Chrome, ffmpeg)
@@ -318,15 +318,15 @@ Ask questions, share pages you made, suggest features, or just say hi.
 - [LINUX DO](https://linux.do), a Chinese-language developer forum
 - [AtomGit](https://atomgit.com/weixin_43367137/answer-me-with-html)
 
-Found a bug? Please open a [GitHub issue](https://github.com/QingYunA/answer-me-with-html/issues).
+Found a bug? Please open a [GitHub issue](https://github.com/doggy8088/answer-me-with-html/issues).
 
 ## Star History
 
-<a href="https://star-history.com/#QingYunA/answer-me-with-html&Date">
+<a href="https://star-history.com/#doggy8088/answer-me-with-html&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=QingYunA/answer-me-with-html&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=QingYunA/answer-me-with-html&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=QingYunA/answer-me-with-html&type=Date" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=doggy8088/answer-me-with-html&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=doggy8088/answer-me-with-html&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=doggy8088/answer-me-with-html&type=Date" />
   </picture>
 </a>
 

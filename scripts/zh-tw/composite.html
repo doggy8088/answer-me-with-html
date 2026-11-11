@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { width:2400px; height:1533px; overflow:hidden; background:#f5f1ea;
+    background-image:linear-gradient(rgba(60,50,30,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(60,50,30,.055) 1px, transparent 1px);
+    background-size:48px 48px;
+    font-family:"Noto Sans CJK TC","PingFang TC",sans-serif; color:#141310; }
+  .wrap { padding:52px 96px 0; }
+  h1 { text-align:center; font-size:96px; font-weight:900; letter-spacing:2px; }
+  .pill { margin:34px auto 0; width:fit-content; background:#fff; border:4px solid #141310; border-radius:999px;
+    padding:20px 44px; font-family:"Noto Sans Mono CJK TC",monospace; font-size:44px; font-weight:700;
+    box-shadow:8px 8px 0 #141310; }
+  .pill .gt { color:#e8590c; }
+  .cols { display:flex; gap:150px; margin-top:54px; position:relative; }
+  .col { flex:1; }
+  .colhead { display:flex; align-items:center; gap:22px; margin-bottom:26px; height:64px; }
+  .tag { font-family:"Noto Sans Mono CJK TC",monospace; font-size:29px; font-weight:700; letter-spacing:3px;
+    border:3px solid #6b675f; color:#55524c; border-radius:8px; padding:10px 18px; white-space:nowrap; }
+  .tag.orange { background:#d9480f; border-color:#d9480f; color:#fff; }
+  .colhead .t { font-size:52px; font-weight:900; white-space:nowrap; }
+  .colhead .t.grey { color:#55524c; }
+  .term { background:#101010; border-radius:20px; height:935px; overflow:hidden; position:relative;
+    box-shadow:14px 14px 0 rgba(20,19,16,.18); }
+  .term .bar { height:64px; background:#1c1c1c; display:flex; align-items:center; gap:14px; padding:0 28px; }
+  .dot { width:22px; height:22px; border-radius:50%; background:#3a3a3a; }
+  .term .body { padding:38px 44px; font-family:"Noto Sans Mono CJK TC",monospace; font-size:27px; line-height:1.62; color:#e8e6e1; }
+  .term .prompt { color:#69db7c; font-weight:700; }
+  .term h3 { font-size:27px; margin:30px 0 16px; color:#fff; }
+  .term p { margin-bottom:8px; }
+  .term .dim { color:#8a8782; }
+  .term .fade { position:absolute; left:0; right:0; bottom:0; height:190px;
+    background:linear-gradient(transparent, #101010 78%); display:flex; align-items:flex-end; justify-content:center; padding-bottom:30px;
+    color:#9a978f; font-family:"Noto Sans Mono CJK TC",monospace; font-size:27px; }
+  .browser { background:#fff; border:3px solid #141310; border-radius:18px; height:935px; overflow:hidden;
+    box-shadow:16px 16px 0 #d9480f; }
+  .browser .bar { height:76px; background:#faf8f4; border-bottom:2px solid #e5e0d5; display:flex; align-items:center; gap:14px; padding:0 26px; }
+  .browser .dot { background:#ddd6c8; }
+  .addr { flex:1; margin-left:16px; background:#fff; border:2px solid #e5e0d5; border-radius:10px; padding:12px 22px;
+    font-family:"Noto Sans Mono CJK TC",monospace; font-size:27px; color:#55524c; }
+  .browser img { width:100%; display:block; }
+  .arrow { position:absolute; left:50%; top:560px; transform:translateX(-50%); font-size:110px; font-weight:900; }
+  .caps { display:flex; gap:150px; margin-top:30px; }
+  .cap { flex:1; font-size:38px; font-weight:700; }
+  .cap.grey { color:#55524c; }
+  .cap.orange { color:#d9480f; }
+</style></head>
+<body><div class="wrap">
+  <h1>同一個問題，兩種截然不同的回答</h1>
+  <div class="pill"><span class="gt">&gt;</span>&nbsp; 講講 TCP 三次握手</div>
+  <div class="cols">
+    <div class="col">
+      <div class="colhead"><span class="tag">沒有這個 SKILL</span><span class="t grey">一堵文字牆</span></div>
+      <div class="term">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="body">
+          <p class="prompt">&gt; 講講 TCP 三次握手</p>
+          <p style="margin-top:26px">TCP 三次握手，是客戶端和伺服器在傳輸資料之前，先約定好建立一條可靠連線的過程。</p>
+          <h3>## 步驟</h3>
+          <p>1. **SYN**：客戶端發出一個 SYN 報文，帶上隨機的初始序號 x，然後進入 SYN_SENT 狀態。</p>
+          <p>2. **SYN-ACK**：伺服器回覆 SYN 加 ACK，確認號為 x+1，同時給出自己的序號 y，然後進入 SYN_RCVD 狀態。</p>
+          <p>3. **ACK**：客戶端確認 y+1。雙方都進入 ESTABLISHED 狀態，可以開始傳輸資料。</p>
+          <p style="margin-top:24px">客戶端&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;伺服器<br>
+          |-------- SYN, seq=x --------&gt;|<br>
+          |&lt;- SYN+ACK, seq=y, ack=x+1 --|<br>
+          |-------- ACK, ack=y+1 ------&gt;|</p>
+          <h3>## 為什麼是三次，不是兩次？</h3>
+          <p>兩次不夠。舊的重複 SYN 可能延遲到達。只握手兩次時，伺服器會為它建立一條無用的連線，白白等著永遠不來的資料。</p>
+          <h3 class="dim">## 狀態遷移</h3>
+        </div>
+        <div class="fade">… 後面還很長</div>
+      </div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="col">
+      <div class="colhead"><span class="tag orange">用 ANSWER ME WITH HTML</span><span class="t">一頁能看見的答案</span></div>
+      <div class="browser">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="addr">tcp-handshake.html</span></div>
+        <img src="__TCP_IMG__" alt="">
+      </div>
+    </div>
+  </div>
+  <div class="caps">
+    <div class="cap grey">得一行一行讀，再在腦子裡拼出整張圖。</div>
+    <div class="cap orange">時序圖、狀態圖、表格和提醒，一眼全在眼前。</div>
+  </div>
+</div></body></html>

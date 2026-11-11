@@ -145,6 +145,7 @@ const ALLOWED = [
 // A single line can instead end in `// lang-ok: <reason>`.
 const EXCEPTIONS = [
   { dir: 'src/languages/', why: 'the page and player labels of each supported language' },
+  { dir: 'scripts/zh-tw/', why: 'the zh-tw pipeline names Simplified forms to detect and replace them' },
   { file: 'src/han-forms.js', why: 'the Simplified and Traditional character data' },
   { file: 'src/lint/wordlist.zh.js', why: 'the Chinese writing-check word list' },
   { file: 'src/lint/ste.js', lines: /^.*[`"]的[`"].*$/gm, why: 'names the Chinese particle the writing check counts' },

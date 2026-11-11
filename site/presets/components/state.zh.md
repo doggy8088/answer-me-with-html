@@ -1,7 +1,7 @@
 ---
 title: state
 ---
-## A TCP 连接
+## A TCP 連線
 ```state LR
 [*] -> Idle
 Idle -> Connecting: connect()

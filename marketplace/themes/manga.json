@@ -11,7 +11,7 @@
   "license": "MIT",
   "description": {
     "en": "Black and white manga panels with halftone-dot panel heads.",
-    "zh": "黑白日漫分格，面板标题带网点底纹。"
+    "zh": "黑白日漫分格，面板標題帶網點底紋。"
   },
   "font": "bangers",
   "tokens": {

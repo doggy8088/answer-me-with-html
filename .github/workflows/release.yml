@@ -6,7 +6,7 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches: [main, zh-tw]
     paths: [package.json]
 
 concurrency:
