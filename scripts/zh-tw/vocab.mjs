@@ -14,6 +14,7 @@ export const GLOBAL_VOCAB = [
   ['文件', '檔案'],       // file-system files; documentation sense restored below
   ['參考檔案', '參考文件'],
   ['粘貼', '貼上'],       // clipboard paste; Taiwan usage (Will, 2026-11-17)
+  ['複制', '複製'],       // opencc tw2 leaves 複制 in some contexts; 制 is ambiguous (制度/控制) so gate 2 cannot catch it
 ];
 export const PHRASES = [
   ['其他寫程式的 WAV', '其他編碼的 WAV'],

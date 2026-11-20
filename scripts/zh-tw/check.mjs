@@ -92,7 +92,7 @@ for (const f of TEXT_FILES) {
 }
 
 // Gate 3: vocabulary.
-const WRONG = ['視頻', '信息', '消息', '數據', '點擊', '用戶', '軟件', '網絡', '屏幕', '默認', '質量', '訪問', '打印', '緩存', '配置', '保存', '註釋', '端口', '局域網', '賬', '羣', '寫程式', '粘貼'];
+const WRONG = ['視頻', '信息', '消息', '數據', '點擊', '用戶', '軟件', '網絡', '屏幕', '默認', '質量', '訪問', '打印', '緩存', '配置', '保存', '註釋', '端口', '局域網', '賬', '羣', '寫程式', '粘貼', '複制'];
 for (const f of CONTENT) {
   const t = read(f);
   for (const w of WRONG) if (t.includes(w)) fail(3, `wrong-form 「${w}」 in ${f}`);
