@@ -1,6 +1,6 @@
 # Reference
 
-[简体中文](reference.zh-CN.md)
+[繁體中文](reference.zh-TW.md)
 
 ## Draft format
 

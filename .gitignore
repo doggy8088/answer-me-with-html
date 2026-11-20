@@ -11,10 +11,10 @@ bench/en/
 bench/corpus/*.html
 bench/corpus/*.md
 
-# 社交媒体宣传图（本地制作，不入库）
+# 社交媒體宣傳圖（本機製作，不入庫）
 docs/social/
 
-# 演示视频成品体积大，不入库（插件安装会拷贝整个仓库）。README 里用 GitHub 附件链接。
+# 示範影片成品體積大，不入庫（外掛安裝會拷貝整個倉庫）。README 裡用 GitHub 附件連結。
 docs/demo/*.mp4
 docs/demo/*.gif
 

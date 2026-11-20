@@ -1,0 +1,1 @@
+serve.json of a pid that belongs to another user (a reused pid) is stale: no link, and serve starts

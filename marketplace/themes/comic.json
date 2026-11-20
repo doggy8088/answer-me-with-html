@@ -1,6 +1,6 @@
 {
   "label": {
-    "zh": "漫画",
+    "zh": "漫畫",
     "zh-Hant": "漫畫",
     "en": "Comic",
     "ja": "コミック",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "description": {
     "en": "Comic panels with black ink, hard shadows and a yellow marker under the title.",
-    "zh": "漫画分格：黑色粗线、硬阴影，标题下一道黄色荧光笔。"
+    "zh": "漫畫分格：黑色粗線、硬陰影，標題下一道黃色熒光筆。"
   },
   "font": "bangers",
   "tokens": {

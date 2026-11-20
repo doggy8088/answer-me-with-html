@@ -1,10 +1,10 @@
 ---
 title: tree
 ---
-## A 项目结构
+## A 項目結構
 ```tree
 web-app | Next.js
-  app | 路由和页面
-  *lib | 公共代码
-  tests | 单元和端到端测试
+  app | 路由和頁面
+  *lib | 公共程式碼
+  tests | 單元和端到端測試
 ```

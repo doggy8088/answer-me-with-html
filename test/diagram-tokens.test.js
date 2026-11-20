@@ -256,8 +256,8 @@ test('am help theme names every diagram token group and the no-fonts rule', asyn
   assert.match(out, /no token for fonts/);
 });
 
-test('docs: reference.md and reference.zh-CN.md list every diagram token', () => {
-  for (const file of ['docs/reference.md', 'docs/reference.zh-CN.md']) {
+test('docs: reference.md and reference.zh-TW.md list every diagram token', () => {
+  for (const file of ['docs/reference.md', 'docs/reference.zh-TW.md']) {
     const text = readFileSync(new URL(`../${file}`, import.meta.url), 'utf8');
     for (const token of DIAGRAM_TOKENS) assert.ok(text.includes(`\`${token}\``), `${file} documents ${token}`);
   }

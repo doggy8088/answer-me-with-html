@@ -11,8 +11,8 @@ const read = (p) => readFileSync(`${ROOT}/${p}`, 'utf8');
 // and their in-page anchors follow their own headings. The sponsored CTA is intentionally limited
 // to English and Chinese. These checks keep the three from drifting apart when one of them is edited.
 
-const READMES = ['README.md', 'README.zh-CN.md', 'README.ja.md'];
-const LABELS = { 'README.md': 'English', 'README.zh-CN.md': '简体中文', 'README.ja.md': '日本語' };
+const READMES = ['README.md', 'README.zh-TW.md', 'README.ja.md'];
+const LABELS = { 'README.md': 'English', 'README.zh-TW.md': '繁體中文', 'README.ja.md': '日本語' };
 
 // Splits a README into its fenced code blocks and the prose around them. A ```` fence holds a
 // ``` fence, so only a matching character at least as long as the opener closes it. Keep both fence

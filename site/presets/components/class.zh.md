@@ -1,7 +1,7 @@
 ---
 title: class
 ---
-## A 类模型
+## A 類模型
 ```class LR
 interface Store
   +find(id: string): User
