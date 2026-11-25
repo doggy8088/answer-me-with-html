@@ -1,10 +1,10 @@
 ---
-title: 给缓存改造做个方案
-subtitle: 把页面缓存从进程内存搬到 Redis
+title: 給快取改造做個方案
+subtitle: 把頁面快取從行程記憶體搬到 Redis
 cols: 3
 ---
-## A 现状 {meta="src/cache.ts"}
-```ts title="cache.ts · 现状"
+## A 現狀 {meta="src/cache.ts"}
+```ts title="cache.ts · 現狀"
 const pages = new Map<string, string>()
 
 export function getPage(key: string) {
@@ -15,9 +15,9 @@ export function setPage(key: string, html: string) {
   pages.set(key, html)
 }
 ```
-每台服务器各存一份，发布一次就清空。
+每台伺服器各存一份，發表一次就清空。
 
-## B 方案 {span=2 meta="示意代码"}
+## B 方案 {span=2 meta="示意程式碼"}
 ```ts title="cache.ts · sketch"
 import { createClient } from 'redis'
 
@@ -33,22 +33,22 @@ export async function setPage(key: string, html: string) {
 }
 ```
 
-## C 步骤 {span=2}
-1. 引入 Redis 客户端，启动时读取 `REDIS_URL`。
-2. 把两个函数改成 async，同时改掉 4 处调用。
-3. 加开关上线，对比一天的命中率。
-4. 删除内存里的 Map。
+## C 步驟 {span=2}
+1. 引入 Redis 客戶端，啟動時讀取 `REDIS_URL`。
+2. 把兩個函式改成 async，同時改掉 4 處呼叫。
+3. 加開關上線，對比一天的命中率。
+4. 刪除記憶體裡的 Map。
 
-## D 待定的问题
+## D 待定的問題
 ```ask
-页面在缓存里存多久？
-* 10 分钟 | 和现在的发布节奏一致
-- 1 小时 | 未命中更少，页面更旧
-- 直到下次发布 | 需要加清缓存的步骤
+頁面在快取裡存多久？
+* 10 分鐘 | 和現在的發表節奏一致
+- 1 小時 | 未命中更少，頁面更舊
+- 直到下次發表 | 需要加清快取的步驟
 ```
 
 ```ask multi
-除了页面还缓存什么？
-* 会话 | 发布后不掉登录
-- API 响应 | 占用更多内存
+除了頁面還快取什麼？
+* 會話 | 發表後不掉登入
+- API 回應 | 佔用更多記憶體
 ```

@@ -18,8 +18,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/QingYunA/answer-me-with-html/releases"><img src="https://img.shields.io/github/v/release/QingYunA/answer-me-with-html?style=flat-square&logo=github&labelColor=16181d&color=2ea44f" alt="Release"></a>
-  <a href="https://github.com/QingYunA/answer-me-with-html/stargazers"><img src="https://img.shields.io/github/stars/QingYunA/answer-me-with-html?style=flat-square&logo=github&labelColor=16181d&color=2ea44f" alt="Stars"></a>
+  <a href="https://github.com/doggy8088/answer-me-with-html/releases"><img src="https://img.shields.io/github/v/release/doggy8088/answer-me-with-html?style=flat-square&logo=github&labelColor=16181d&color=2ea44f" alt="Release"></a>
+  <a href="https://github.com/doggy8088/answer-me-with-html/stargazers"><img src="https://img.shields.io/github/stars/doggy8088/answer-me-with-html?style=flat-square&logo=github&labelColor=16181d&color=2ea44f" alt="Stars"></a>
   <img src="https://img.shields.io/badge/works%20with-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%20OpenCode%20%C2%B7%20Pi%20%C2%B7%20DeepSeek%20Harness-2ea44f?style=flat-square&labelColor=16181d" alt="Works with Claude Code, Codex, Cursor, OpenCode, Pi, DeepSeek Harness">
   <a href="https://www.theagenticleaderboard.com/alternatives/answer-me-with-html/"><img src="https://www.theagenticleaderboard.com/badges/new/answer-me-with-html.svg" alt="The New 100"></a>
   <a href="https://ko-fi.com/yunqing_love"><img src="https://img.shields.io/badge/Ko--fi-support-ff5e5b?style=flat-square&logo=kofi&logoColor=white&labelColor=16181d" alt="Support on Ko-fi"></a>
@@ -27,7 +27,7 @@
 </p>
 
 <p align="center">
-  <a href="https://answer-me-with-html.com/"><b>Web サイト</b></a> · <a href="#インストール">インストール</a> · <a href="#質問すると返ってくるもの">例</a> · <a href="#解説動画">動画</a> · <a href="#常時モード推奨">常時モード</a> · <a href="docs/reference.md">リファレンス</a> · <a href="README.md">English</a> · <a href="README.zh-CN.md">简体中文</a>
+  <a href="https://answer-me-with-html.com/"><b>Web サイト</b></a> · <a href="#インストール">インストール</a> · <a href="#質問すると返ってくるもの">例</a> · <a href="#解説動画">動画</a> · <a href="#常時モード推奨">常時モード</a> · <a href="docs/reference.md">リファレンス</a> · <a href="README.md">English</a> · <a href="README.zh-TW.md">繁體中文</a>
 </p>
 
 インストールしたら、いつもどおりに質問してください。
@@ -68,7 +68,7 @@ https://github.com/user-attachments/assets/d3063a28-5dfd-4c44-a562-be901c49b249
 
 <p align="center"><sub>同じ質問に、同じモデルが 2 つの方法で答えたものです。どちらのページも使えます。</sub></p>
 
-トークン数は [bench/corpus/tokens.json](bench/corpus/tokens.json) に保存されているので、`node bench/corpus.mjs` を実行すると毎回同じ数字が得られます。ページそのものは[ダウンロード](https://github.com/QingYunA/answer-me-with-html/releases/download/v0.4.14/bench-corpus-2026-10-07.zip)できます。料金は書く量ほどには下がらず、ここでは約 15% です。スキルの有無にかかわらず、毎ターンでシステムプロンプト、あなたの質問、会話も読み込むためです。[コストの内訳](bench/README.md#where-the-cost-goes)をご覧ください。
+トークン数は [bench/corpus/tokens.json](bench/corpus/tokens.json) に保存されているので、`node bench/corpus.mjs` を実行すると毎回同じ数字が得られます。ページそのものは[ダウンロード](https://github.com/doggy8088/answer-me-with-html/releases/download/v0.4.14/bench-corpus-2026-10-07.zip)できます。料金は書く量ほどには下がらず、ここでは約 15% です。スキルの有無にかかわらず、毎ターンでシステムプロンプト、あなたの質問、会話も読み込むためです。[コストの内訳](bench/README.md#where-the-cost-goes)をご覧ください。
 
 解説動画では、さらに節約できます。[小さなテスト](bench/README.md#explainer-videos)では、出力トークンが約 18 分の 1、速さは約 12 倍でした。
 
@@ -80,16 +80,16 @@ https://github.com/user-attachments/assets/d3063a28-5dfd-4c44-a562-be901c49b249
 
 これを Claude Code、Codex、Cursor、OpenCode などのエージェントに貼り付けてください。
 
-> Answer me with HTML をインストールして：https://raw.githubusercontent.com/QingYunA/answer-me-with-html/main/INSTALL.md を読んで、その手順に従ってください。
+> Answer me with HTML をインストールして：https://raw.githubusercontent.com/doggy8088/answer-me-with-html/main/INSTALL.md を読んで、その手順に従ってください。
 
-[INSTALL.md](INSTALL.md) はエージェント向けに書かれています。Claude Code にはプラグインを、ほかのエージェントにはスキルをインストールし、既存のインストールはそのまま残します。Node.js がないか 20 より古い場合を除いて、あなたには何も尋ねず、最後に TCP の 3 ウェイハンドシェイクのページで結果を確認してから、報告を 1 回行います。エージェントがリンクを開けない場合は、`npx -y skills add QingYunA/answer-me-with-html -g -y -a <your agent name>` を使ってください（Claude Code の場合は `-a claude-code`）。
+[INSTALL.md](INSTALL.md) はエージェント向けに書かれています。Claude Code にはプラグインを、ほかのエージェントにはスキルをインストールし、既存のインストールはそのまま残します。Node.js がないか 20 より古い場合を除いて、あなたには何も尋ねず、最後に TCP の 3 ウェイハンドシェイクのページで結果を確認してから、報告を 1 回行います。エージェントがリンクを開けない場合は、`npx -y skills add doggy8088/answer-me-with-html -g -y -a <your agent name>` を使ってください（Claude Code の場合は `-a claude-code`）。
 
 ### Claude Code のプラグイン
 
 Claude Code の中で次を実行します。
 
 ```
-/plugin marketplace add QingYunA/answer-me-with-html
+/plugin marketplace add doggy8088/answer-me-with-html
 /plugin install answer-me-with-html@answer-me-with-html
 ```
 
@@ -98,13 +98,13 @@ Claude Code の中で次を実行します。
 使っているプロファイル（同梱されているのは `web`）を指定して、ターミナルで次を実行します。
 
 ```bash
-dsh plugin --profile web add github:QingYunA/answer-me-with-html
+dsh plugin --profile web add github:doggy8088/answer-me-with-html
 ```
 
 ### 1 コマンドで
 
 ```bash
-npx skills add QingYunA/answer-me-with-html
+npx skills add doggy8088/answer-me-with-html
 ```
 
 どのエージェントにインストールするかを尋ねられます。インストーラーの [vercel-labs/skills](https://github.com/vercel-labs/skills) は 70 以上のエージェントに対応しています。
@@ -115,7 +115,7 @@ npx skills add QingYunA/answer-me-with-html
 `skills/answer-me-with-html` フォルダーを、エージェントのスキルフォルダーにコピーします。Claude Code の場合：
 
 ```bash
-git clone --depth 1 https://github.com/QingYunA/answer-me-with-html.git /tmp/answer-me-with-html
+git clone --depth 1 https://github.com/doggy8088/answer-me-with-html.git /tmp/answer-me-with-html
 cp -R /tmp/answer-me-with-html/skills/answer-me-with-html ~/.claude/skills/answer-me-with-html
 ```
 
@@ -286,7 +286,7 @@ SYN_RCVD -> *ESTABLISHED: get ACK
 ## 開発
 
 ```bash
-git clone https://github.com/QingYunA/answer-me-with-html.git && cd answer-me-with-html
+git clone https://github.com/doggy8088/answer-me-with-html.git && cd answer-me-with-html
 npm install
 npm test          # run the tests
 AM_E2E=1 npm test # also run end-to-end video tests (system TTS, Chrome, ffmpeg)
@@ -308,15 +308,15 @@ npm run snapshot  # compare rendered HTML with origin/main (refactors must not c
 - [LINUX DO](https://linux.do)、中国語の開発者フォーラム
 - [AtomGit](https://atomgit.com/weixin_43367137/answer-me-with-html)
 
-バグを見つけたら、[GitHub issue](https://github.com/QingYunA/answer-me-with-html/issues) を作成してください。
+バグを見つけたら、[GitHub issue](https://github.com/doggy8088/answer-me-with-html/issues) を作成してください。
 
 ## Star History
 
-<a href="https://star-history.com/#QingYunA/answer-me-with-html&Date">
+<a href="https://star-history.com/#doggy8088/answer-me-with-html&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=QingYunA/answer-me-with-html&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=QingYunA/answer-me-with-html&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=QingYunA/answer-me-with-html&type=Date" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=doggy8088/answer-me-with-html&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=doggy8088/answer-me-with-html&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=doggy8088/answer-me-with-html&type=Date" />
   </picture>
 </a>
 

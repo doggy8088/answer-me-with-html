@@ -3,7 +3,7 @@ name: Pages
 # Build the project website (npm run site) and publish site/dist to GitHub Pages.
 on:
   push:
-    branches: [main]
+    branches: [main, zh-tw]
     paths:
       - 'site/**'
       - 'src/**'

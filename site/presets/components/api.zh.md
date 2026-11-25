@@ -1,7 +1,7 @@
 ---
 title: api
 ---
-## A 接口联动改造
+## A 介面聯動改造
 ```api
 ~ GET /users/{id}
 response 200 User

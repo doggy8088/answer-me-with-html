@@ -1,19 +1,19 @@
 ---
-title: 选一个首屏方向
-subtitle: 同一个产品，三种落地页。先看缩略图，再选一个。
+title: 選一個首屏方向
+subtitle: 同一個產品，三種落地頁。先看縮略圖，再選一個。
 template: doc
 theme: shadcn
 lang: zh
 file: landing-choice
 ---
-缩略图只画结构，不代表最终视觉。选定后我按这个方向画完整页面。
+縮略圖只畫結構，不代表最終視覺。選定後我按這個方向畫完整頁面。
 
-## A 首屏选择题 {bare}
+## A 首屏選擇題 {bare}
 ```ask cards
-三种首屏，你选哪一种？
-* A 先讲价值 | 标题直接说结果，适合第一次来的访客
+三種首屏，你選哪一種？
+* A 先講價值 | 標題直接說結果，適合第一次來的訪客
   :::html
-  <svg viewBox="0 0 320 180" width="320" height="180" role="img" aria-label="左文右图：标题和按钮在左，产品截图在右" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 320 180" width="320" height="180" role="img" aria-label="左文右圖：標題和按鈕在左，產品截圖在右" xmlns="http://www.w3.org/2000/svg">
     <rect x=".5" y=".5" width="319" height="179" rx="8" style="fill:var(--paper);stroke:var(--line-2)"/>
     <path d="M.5 8A7.5 7.5 0 0 1 8 .5h304a7.5 7.5 0 0 1 7.5 7.5v10H.5Z" style="fill:var(--fill);stroke:var(--line-2)"/>
     <circle cx="12" cy="9" r="2" style="fill:var(--ink-3)"/>
@@ -33,9 +33,9 @@ file: landing-choice
     <rect x="178" y="44" width="44" height="5" rx="2.5" style="fill:var(--ink-3)"/>
   </svg>
   :::
-- B 先给画面 | 大图先建立情绪，再补一句说明
+- B 先給畫面 | 大圖先建立情緒，再補一句說明
   :::html
-  <svg viewBox="0 0 320 180" width="320" height="180" role="img" aria-label="大图在上：通栏主视觉，标题和按钮居中" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 320 180" width="320" height="180" role="img" aria-label="大圖在上：通欄主視覺，標題和按鈕居中" xmlns="http://www.w3.org/2000/svg">
     <rect x=".5" y=".5" width="319" height="179" rx="8" style="fill:var(--paper);stroke:var(--line-2)"/>
     <path d="M.5 8A7.5 7.5 0 0 1 8 .5h304a7.5 7.5 0 0 1 7.5 7.5v10H.5Z" style="fill:var(--fill);stroke:var(--line-2)"/>
     <circle cx="12" cy="9" r="2" style="fill:var(--ink-3)"/>
@@ -50,9 +50,9 @@ file: landing-choice
     <rect x="138" y="154" width="44" height="13" rx="6.5" style="fill:var(--accent)"/>
   </svg>
   :::
-- C 只问一句 | 首屏只留一个问题和一个按钮
+- C 只問一句 | 首屏只留一個問題和一個按鈕
   :::html
-  <svg viewBox="0 0 320 180" width="320" height="180" role="img" aria-label="极简：一个问题、一个输入框和一个按钮" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 320 180" width="320" height="180" role="img" aria-label="極簡：一個問題、一個輸入框和一個按鈕" xmlns="http://www.w3.org/2000/svg">
     <rect x=".5" y=".5" width="319" height="179" rx="8" style="fill:var(--paper);stroke:var(--line-2)"/>
     <path d="M.5 8A7.5 7.5 0 0 1 8 .5h304a7.5 7.5 0 0 1 7.5 7.5v10H.5Z" style="fill:var(--fill);stroke:var(--line-2)"/>
     <circle cx="12" cy="9" r="2" style="fill:var(--ink-3)"/>
@@ -69,6 +69,6 @@ file: landing-choice
   :::
 ```
 
-```callout info 选定之后
-点右上角 Reply 把选项发给我。我按这个方向画完整页面，并保留另外两版做对比。
+```callout info 選定之後
+點右上角 Reply 把選項發給我。我按這個方向畫完整頁面，並保留另外兩版做對比。
 ```

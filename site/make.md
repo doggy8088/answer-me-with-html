@@ -5,18 +5,18 @@ You are an agent. Your user wants a theme for Answer me with HTML, a tool that t
 ## 1. Find the `am` command
 
 - If the Answer me with HTML skill is installed, `am` is `node <skill folder>/scripts/am.mjs`.
-- If it is not installed, install it with `npx skills add QingYunA/answer-me-with-html`, or ask the user how they want to install it.
+- If it is not installed, install it with `npx skills add doggy8088/answer-me-with-html`, or ask the user how they want to install it.
 - `am theme check` needs version 0.4.10 or newer. A theme's `font` field needs 0.5.3 or newer; older versions show system fonts.
 
 ## 2. Start from the closest catalog theme
 
-1. Read the catalog list: https://answer-me-with-html.com/themes/index.json (name, label, description of each theme).
+1. Read the catalog list: https://answer-me-with-html.gh.miniasp.com/themes/index.json (name, label, description of each theme).
 2. Pick the theme whose look is closest to what the user asked for. Catalog themes already pass every catalog rule, so a start from one of them passes too in most cases.
 3. Pick a name for the new theme: lowercase letters, digits and `-`, at most 40 characters. It must not be a built-in theme (`blueprint`, `shadcn`, `paper`, `3b1b`), `index`, `new`, or a name in the catalog list.
 4. Download the start and save it as `~/.answer-me-with-html/themes/<name>.json` (`$AM_HOME/themes/` when `AM_HOME` is set):
 
 ```bash
-curl -fsSL https://answer-me-with-html.com/themes/<start>.json -o ~/.answer-me-with-html/themes/<name>.json --create-dirs
+curl -fsSL https://answer-me-with-html.gh.miniasp.com/themes/<start>.json -o ~/.answer-me-with-html/themes/<name>.json --create-dirs
 ```
 
 The user can use the theme right away: `theme: <name>` in a draft, `--theme <name>`, or `am config set theme <name>`.
@@ -64,11 +64,11 @@ It reports errors and contrast problems, and writes two specimen pages, light an
 Submitting publishes the theme on GitHub, so ask first. Build the prefilled issue URL:
 
 ```bash
-node -e 'const fs=require("fs"),os=require("os"),path=require("path");const n=process.argv[1];const f=path.join(process.env.AM_HOME||path.join(os.homedir(),".answer-me-with-html"),"themes",n+".json");const u=new URL("https://github.com/QingYunA/answer-me-with-html/issues/new");u.search=new URLSearchParams({template:"theme.yml",title:"Theme: "+n,name:n,theme:JSON.stringify(JSON.parse(fs.readFileSync(f,"utf8")))});console.log(u.href)' <name>
+node -e 'const fs=require("fs"),os=require("os"),path=require("path");const n=process.argv[1];const f=path.join(process.env.AM_HOME||path.join(os.homedir(),".answer-me-with-html"),"themes",n+".json");const u=new URL("https://github.com/doggy8088/answer-me-with-html/issues/new");u.search=new URLSearchParams({template:"theme.yml",title:"Theme: "+n,name:n,theme:JSON.stringify(JSON.parse(fs.readFileSync(f,"utf8")))});console.log(u.href)' <name>
 ```
 
 Give the URL to the user, or open it in their browser. The user needs a GitHub account. On the page they tick the License box and click "Create". If the URL is longer than 8000 characters, give the URL without the `theme` parameter and ask the user to paste the file into "Theme JSON".
 
 Do not create the issue with the GitHub API or `gh`: an issue made that way by someone outside the project loses its label, and the bot does not check it.
 
-After the user submits, a bot checks the theme on the issue and comments. If it lists problems, fix the file, run `am theme check` again, and have the user paste the new file into the issue (edit). A maintainer reviews every theme before it goes into the catalog at https://answer-me-with-html.com/themes/.
+After the user submits, a bot checks the theme on the issue and comments. If it lists problems, fix the file, run `am theme check` again, and have the user paste the new file into the issue (edit). A maintainer reviews every theme before it goes into the catalog at https://answer-me-with-html.gh.miniasp.com/themes/.

@@ -1,6 +1,6 @@
 # How it compares
 
-[简体中文](compare.zh-CN.md)
+[繁體中文](compare.zh-TW.md)
 
 Other tools also turn agent output into something visual. Two come up most: [Archify](https://github.com/tt-a1i/archify) and the GenUI plugins for DeepSeek Harness, such as [dsh-genui](https://github.com/omdsh-dev/dsh-genui). Each one does a different job.
 
@@ -28,4 +28,4 @@ Other tools also turn agent output into something visual. Two come up most: [Arc
 - **No host needed.** The agent runs one shell command. Nothing has to render inside the chat app.
 - **Text you can trust.** Code blocks quote your real files, and the writing check keeps sentences short and plain.
 
-The facts about Archify and dsh-genui come from their READMEs, checked on 2026-10-07. If something here is out of date, please [open an issue](https://github.com/QingYunA/answer-me-with-html/issues).
+The facts about Archify and dsh-genui come from their READMEs, checked on 2026-10-07. If something here is out of date, please [open an issue](https://github.com/doggy8088/answer-me-with-html/issues).

@@ -1,6 +1,6 @@
 # Narration with ElevenLabs
 
-[简体中文](elevenlabs.zh-CN.md)
+[繁體中文](elevenlabs.zh-TW.md)
 
 `am video` can read the narration with [ElevenLabs](https://elevenlabs.io). Without a key it uses the system voice, so this setup is optional.
 
